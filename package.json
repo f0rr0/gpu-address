@@ -1,0 +1,17 @@
+{
+  "name": "gpu-address-monorepo",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/core",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace gpu-address",
+    "test": "npm run build && npm test --workspace gpu-address",
+    "test:parity": "node packages/core/test/parity.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

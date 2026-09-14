@@ -1,0 +1,27 @@
+name: gpu-address
+
+on: [pull_request, push]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: '0.12.13'
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+      - run: uv sync --locked --all-extras
+      - run: npm ci
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - run: uv run ty check
+      - run: npm test
+      - run: uv run pytest
+      - run: uv build

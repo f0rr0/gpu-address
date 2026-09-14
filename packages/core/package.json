@@ -1,0 +1,25 @@
+{
+  "name": "gpu-address",
+  "version": "0.1.0",
+  "description": "Experimental small postal-address parser for browsers",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "node --test test/runtime.test.mjs"
+  },
+  "dependencies": {
+    "onnxruntime-web": "1.29.0"
+  },
+  "devDependencies": {
+    "typescript": "7.0.2"
+  }
+}
