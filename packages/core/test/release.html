@@ -1,0 +1,106 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self'">
+<title>gpu-postal release qualification</title>
+<h1>gpu-postal release qualification</h1>
+<p>Local-only check. Serve the repository after npm run build. Requires the frozen local GeoSearch sample.</p>
+<pre id="result">running</pre>
+<details><summary>Raw predictions</summary><pre id="predictions"></pre></details>
+<script type="module">
+import { createParser } from '../dist/index.js';
+const result = document.querySelector('#result');
+const assert = (ok, message) => { if (!ok) throw new Error(message); };
+const sha = async bytes => [...new Uint8Array(await crypto.subtle.digest('SHA-256', bytes))]
+  .map(x => x.toString(16).padStart(2, '0')).join('');
+async function json(url) {
+  const response = await fetch(url, { cache: 'no-store' });
+  if (!response.ok) throw new Error(`HTTP ${response.status}: ${url}`);
+  return response.json();
+}
+// GeoSearch sample is ASCII: this exactly matches Python NFKC/casefold token multisets there.
+function fields(parts) {
+  const out = {};
+  for (const { label, raw } of parts) {
+    for (const token of raw.normalize('NFKC').toLowerCase().match(/[\p{L}\p{N}_]+|[^\p{L}\p{N}_\s,]/gu) || []) {
+      out[label] ??= {};
+      out[label][token] = (out[label][token] || 0) + 1;
+    }
+  }
+  return Object.fromEntries(Object.entries(out).sort().map(([label, tokens]) =>
+    [label, Object.fromEntries(Object.entries(tokens).sort())]));
+}
+const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+const quantile = (times, p) => times[Math.ceil(times.length * p) - 1];
+let parser;
+try {
+  performance.setResourceTimingBufferSize(2000);
+  const start = performance.now();
+  parser = await createParser();
+  const initializationMs = performance.now() - start;
+  const first = performance.now();
+  await parser.parse('123 Main Street, Boston MA 02110');
+  const firstParseMs = performance.now() - first;
+  const adapter = await navigator.gpu.requestAdapter();
+  const adapterInfo = adapter.info;
+  const model = await fetch('../model.bin', {cache:'no-store'}).then(r => {
+    assert(r.ok, 'model fetch failed'); return r.arrayBuffer();
+  });
+  const modelSha256 = await sha(model);
+  assert(modelSha256 === '4ca878842b0eef37037f9ca5fa8f77096b54bb5ff34c42d4c3927d99b7a65624', 'Wrong release model');
+  const base = '/data/geosearch-sample-20260916/';
+  const records = await json(base + 'inputs.json');
+  const baseline = await json(base + 'ours12-predictions.json');
+  assert(records.length === 1000 && baseline.length === 1000, 'Wrong frozen sample size');
+  assert(records.every(r => /^[\x00-\x7f]*$/.test(r.text)), 'Metric requires ASCII GeoSearch inputs');
+  const previous = new Map(baseline.map(r => [r.id, r.predicted]));
+  const workflow = await json('/docs/evidence/release-workflow-20260917.json');
+  const counts = { all: {n:0, exact:0}, four_fields_present:{n:0, exact:0}, partial:{n:0,exact:0} };
+  let floatExact = 0, changed = 0;
+  const predictions = [], times = [];
+  const before = performance.getEntriesByType('resource').length;
+  for (const [i, row] of records.entries()) {
+    const started = performance.now();
+    const predicted = (await parser.parse(row.text)).components;
+    times.push(performance.now() - started);
+    const gold = fields(row.components), actual = fields(predicted);
+    const group = same(Object.keys(gold), ['city','postcode','state','street_address']) ? 'four_fields_present' : 'partial';
+    const exact = same(gold, actual);
+    for (const key of ['all',group]) { counts[key].n++; counts[key].exact += Number(exact); }
+    floatExact += Number(same(gold,fields(previous.get(row.id))));
+    changed += Number(!same(actual,fields(previous.get(row.id))));
+    predictions.push({id:row.id,predicted});
+    if (i % 100 === 0) result.textContent = `GeoSearch ${i}/1000`;
+  }
+  assert(floatExact === 879, 'Metric does not reproduce frozen float32 score');
+  const workflowResults = [];
+  for (const row of workflow.cases) {
+    for (const variant of ['source', 'lowercase-no-commas']) {
+      const transform = value => variant === 'source' ? value : value.toLowerCase().replaceAll(',', '');
+      const text = transform(row.text);
+      const expected = fields(Object.entries(row.fields).map(([label, raw]) => ({label,raw:transform(raw)})));
+      const predicted = (await parser.parse(text)).components;
+      const actual = fields(predicted);
+      const labels = [...new Set([...Object.keys(expected), ...Object.keys(actual)])];
+      const corrections = labels.filter(label => !same(expected[label],actual[label]));
+      workflowResults.push({country:row.country,variant,text,predicted,fieldsToEnter:Object.keys(expected).length,
+        fieldsToCorrect:corrections.length,corrections,exact:corrections.length === 0});
+    }
+  }
+  const inferenceResourceRequests = performance.getEntriesByType('resource').length - before;
+  assert(inferenceResourceRequests === 0, 'Inference generated resource requests');
+  times.sort((a,b) => a-b);
+  document.querySelector('#predictions').textContent = JSON.stringify(predictions);
+  result.textContent = JSON.stringify({status:'passed',date:new Date().toISOString(),modelSha256,modelBytes:model.byteLength,
+    browser:navigator.userAgent,adapter:{vendor:adapterInfo.vendor,architecture:adapterInfo.architecture,isFallbackAdapter:adapterInfo.isFallbackAdapter},
+    initializationMs,firstParseMs,warm:{n:times.length,medianMs:quantile(times,.5),p95Ms:quantile(times,.95)},
+    timingScope:'First parser instance in this page; localhost transfer; browser/driver shader cache not purged. Warm times are sequential, not batched.',
+    geosearch:counts,float32MetricCheck:floatExact,changedFieldOutputsFromFloat32:changed,
+    privacy:{inferenceResourceRequests,scope:'Local qualification page; same-origin CSP; no hosted product demo exists.'},
+    resources:performance.getEntriesByType('resource').filter(r => /\/core\/(dist\/.*\.js|model\.bin)/.test(r.name))
+      .map(r=>({path:new URL(r.name).pathname,transferSize:r.transferSize,encodedBodySize:r.encodedBodySize,decodedBodySize:r.decodedBodySize})),
+    workflow:workflowResults},null,2);
+} catch(error) {
+  result.textContent = JSON.stringify({status:'failed',error:String(error)});
+  console.error(error);
+} finally { await parser?.dispose(); }
+</script>

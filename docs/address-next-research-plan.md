@@ -141,7 +141,7 @@ throughput comparison, not an accuracy comparison. Full shuffled disk I/O and lo
 thermal behavior were not measured by this probe.
 [Measured throughput](evidence/retraining-throughput-20260915.json).
 
-The first data milestone is implemented and executed: `gpu-address corpus` inventories
+The first data milestone is implemented and executed: `gpu-postal corpus` inventories
 every pinned source shard and performs uncapped, disk-backed audits. Full scans of
 14 countries examined 7,488,401 rows and retained 7,320,483 Latin-script staging
 candidates. Peak process RSS was 207,159,296 bytes (about 198 MiB); those initial audit

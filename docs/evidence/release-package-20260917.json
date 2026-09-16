@@ -1,0 +1,165 @@
+{
+  "name": "gpu-postal",
+  "version": "0.1.0-experimental.1",
+  "epoch": 12,
+  "format": "GPA3 int8 storage / float32 GPU arithmetic",
+  "assets": {
+    "gpu-postal-0.1.0-experimental.1.tgz": {
+      "bytes": 144634,
+      "sha256": "5b46bd01505b1d07cf63b3fc818086fee853fe585ff4c56cf5f65705bca2c380"
+    },
+    "model.bin": {
+      "bytes": 154562,
+      "sha256": "4ca878842b0eef37037f9ca5fa8f77096b54bb5ff34c42d4c3927d99b7a65624"
+    },
+    "epoch-12.pt": {
+      "bytes": 1894719,
+      "sha256": "436dc0a84fca3816a851f28a5eb56d716153acc993748ddc16768e7c6502e7ec"
+    },
+    "MODEL_CARD.md": {
+      "bytes": 5884,
+      "sha256": "71751b7220f70a335c85dc42a6607cc14ea2f61eb26ac29b97be2f4c32a9d943"
+    },
+    "LICENSE": {
+      "bytes": 1065,
+      "sha256": "582f09f1a3ab7aa1446c541b769d85f2281b54ea77b81ffbe25e7990674bcb34"
+    },
+    "THIRD_PARTY_NOTICES.md": {
+      "bytes": 4156,
+      "sha256": "6d2aa2e7d49d98fde175368dd41c884942b7b52aeec585515636ba102c6ae8b0"
+    },
+    "browser-qualification.json": {
+      "bytes": 2302,
+      "sha256": "241a900476b847c906ec2fa5b1b48176252e6f854f8b0568e6d8624119d2cab1"
+    }
+  },
+  "runtime": {
+    "index.js": {
+      "bytes": 4572,
+      "sha256": "c3bb7571fd774be9743e5309459e49410393a3613c2f027b13f6c70838048263"
+    },
+    "contract.js": {
+      "bytes": 4576,
+      "sha256": "4860269ec3669bdaaede43d2da309d34b31efd4fac3c05cd731eaf7a97cde9cc"
+    },
+    "kernel.js": {
+      "bytes": 6784,
+      "sha256": "a92c22b1c62e7ec2f43c3ffdba691a12679657645e2619cf327b7cd456c8aaf6"
+    },
+    "model.js": {
+      "bytes": 4205,
+      "sha256": "7e5d9384957e56b933e426fde32efa2ed682af1773d02c3c806127cf7736fd52"
+    }
+  },
+  "payload": {
+    "rawBytes": 174699,
+    "gzipBytes": 135653,
+    "brotliBytes": 133380,
+    "note": "Compressed sizes are local per-file calculations, not measured CDN transfer. Includes four JS modules and weights only."
+  },
+  "data": {
+    "countries": [
+      "au",
+      "ca",
+      "gb",
+      "ie",
+      "nz",
+      "us",
+      "za"
+    ],
+    "trainingRows": 3790046,
+    "source_counts": {
+      "au": {
+        "cf5e2c7e6e074c6a9606fbd88819f9709fde3442a7b29b20b9bbfe7a375fb2aa": 1443014,
+        "senzing-geoplanet_formatted_addresses_tagged": 585,
+        "osm-tagged": 123,
+        "oa-tagged": 572,
+        "senzing-formatted_addresses_tagged": 237,
+        "senzing-formatted_places_tagged": 1,
+        "senzing-formatted_ways_tagged": 681
+      },
+      "ca": {
+        "osm-tagged": 894,
+        "oa-tagged": 729,
+        "senzing-formatted_addresses_tagged": 116,
+        "senzing-formatted_places_tagged": 33,
+        "senzing-formatted_ways_tagged": 692
+      },
+      "gb": {
+        "osm-tagged": 568,
+        "senzing-tagged": 6984,
+        "senzing-formatted_addresses_tagged": 1480,
+        "senzing-senzing_formatted_random": 4938,
+        "a983cdfbb4db7ef3353221acfca2d83d253d9f6f7ebfe0d45d65d64af83657ee": 68320
+      },
+      "ie": {
+        "a783df9332f7aef502bcedb5ec80c6bb203d51f9c922f52275fe70e018c0b383": 56046,
+        "osm-tagged": 44,
+        "senzing-formatted_addresses_tagged": 67,
+        "senzing-formatted_places_tagged": 80,
+        "senzing-formatted_ways_tagged": 181
+      },
+      "nz": {
+        "8c65f372fc312f24e3e4b2b8280b3ff54fc9bfbbd5f128a3ee73a7a83d7bac17": 1576754,
+        "senzing-geoplanet_formatted_addresses_tagged": 60,
+        "osm-tagged": 39,
+        "oa-tagged": 186,
+        "senzing-formatted_addresses_tagged": 21,
+        "senzing-formatted_places_tagged": 8,
+        "senzing-formatted_ways_tagged": 101
+      },
+      "us": {
+        "osm-tagged": 3742,
+        "oa-tagged": 11408,
+        "senzing-formatted_places_tagged": 193,
+        "senzing-formatted_ways_tagged": 401,
+        "senzing-geoplanet_formatted_addresses_tagged": 1356,
+        "251f9a91685ec91b0a389d0a5ddcadd8ef48831b37cb221fdbb2ec56fa34e265": 26067,
+        "ec90464a08e009ebbff1a89f38bb7d8bb53b21281a126a3254d0ed59fd1f92e8": 14717,
+        "81c9cdbb2fc0fe4d2912c3bf3ed262703d509ffbaf84d8a3b4bc102c39005ee0": 14708,
+        "c5ca77c73d3f78b0149a199dc8eb6113b2bec1db95171223028dd1f882890ca6": 14029
+      },
+      "za": {
+        "ee507b1b5069e614aeb073ae03237e2159f07bd038ca3b004e9a70d30e5461e6": 962896,
+        "senzing-geoplanet_formatted_addresses_tagged": 1317,
+        "osm-tagged": 13,
+        "oa-tagged": 115,
+        "senzing-formatted_addresses_tagged": 122,
+        "senzing-formatted_places_tagged": 3,
+        "senzing-formatted_ways_tagged": 568,
+        "worldwide-za": 4881
+      }
+    },
+    "inputs": {
+      "data/latin-20260915/diagnostic-v4/train.jsonl.gz": "6dd935694398addccc6c843b507c48b05ba44bbb71dddbc38748b1112c1be105",
+      "data/latin-20260915/us-gb-expansion-v1/candidates.jsonl.gz": "3a179c0734985015063873d93cc39fa0155acdd9bd43791b8c54551143a4a6d9",
+      "data/multisource/public-benchmark.jsonl.gz": "b6c66d2ad6c2eeef8fdd03e368e2fb482478d5e8485aef6f54fd04cd1530bf04",
+      "data/multisource/dev.jsonl.gz": "a53553e91bec7a71d0ba9d6b0ef3c820215dd0eae9308e5d4ffac808551c2ae0",
+      "data/multisource/source-dev.jsonl.gz": "31ad62dbfa3dd0046dd54d8256e49132314aa73de53b9ac6d633854073c689b6",
+      "data/webgpu/dev.jsonl.gz": "0519fe439e270cdfdbbecae017e8caceddded183c07cb0554aaa9d59d872cc21",
+      "docs/evidence/natural-ai-review.jsonl": "cfae2c83f5532fa2eff9024524bffd3740d5ad0d6f0e43aa5707dee6556194b8",
+      "docs/evidence/natural-complete-ai-review.jsonl": "61ef112528621879aa5bc222bb014a73c3196234ff8781bd8e1ecaa03782fe2b",
+      "data/latin-20260915/natural-v1/dev.jsonl.gz": "c9e8f0eb98c12ca0620b4c011caac6f01886558b4f5ff1314559dbee809d7c0b",
+      "data/latin-20260915/natural-v1/test.jsonl.gz": "95ebee04b5c52d0d22ddbab6764f40540ad8233f33bab54c313734cfde300ffe",
+      "data/competitor-comparison-20260916/inputs.jsonl": "789686899fd7a3a9babd543a60b407434d80300bb4b640e7f3f735ad3889a992"
+    },
+    "outputs": {
+      "test-all.jsonl.gz": "a247b0d5dcea8d304084a4fe8e696b75c2111ca2c433f4192900a71f48d907f8",
+      "dev.jsonl.gz": "0b33d2383bc0a7565cf63afad3216ebf4ffecdb02a03db922da1588aab454cfd",
+      "public-benchmark.jsonl.gz": "316aafe68f0d21903bdcdb8d7430916bb7ce482008fac6f1ad156fb98201bd85",
+      "train.jsonl.gz": "de4b47fdcff61c0eeb5f86c32623309e7c3a5e5c8154b9344f7bb598b668125f",
+      "test.jsonl.gz": "de4e6846c3454d299093c037ae5c92779013d4e8b284fee68c5dc4a6b9e1e741",
+      "dev-all.jsonl.gz": "611594ca598c4ab2f33ccc2457bec39b85f88febd03017f8076bcfcd40b3e98c"
+    },
+    "split_policy": "SHA256 street+city/postcode group: 90% train, 5% dev, 5% test; no training cap; evaluation reservoir <=2000/country/split, full heldout rows retained",
+    "limitations": [
+      "All usable existing admitted originals, not every raw address shard or every address in each country.",
+      "English source metadata or language-neutral generated fields; proper names retained, not automatic language certification.",
+      "Same-source heldout streets, not independent natural traffic. Entity alias linkage incomplete.",
+      "Legacy checkpoints may have seen these new source holdouts; scratch candidate has not.",
+      "Public benchmark already inspected; diagnostic only, not training or epoch selection.",
+      "Source mapping errors and source concentration remain; no population-wide accuracy claim."
+    ]
+  },
+  "licenses": "Original code/documentation MIT; model source conditions preserved in THIRD_PARTY_NOTICES.md"
+}

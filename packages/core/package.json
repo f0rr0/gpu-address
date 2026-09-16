@@ -1,25 +1,27 @@
 {
-  "name": "gpu-address",
-  "version": "0.1.0",
-  "description": "Experimental small postal-address parser for browsers",
+  "name": "gpu-postal",
+  "version": "0.1.0-experimental.1",
+  "license": "SEE LICENSE IN THIRD_PARTY_NOTICES.md",
+  "repository": { "type": "git", "url": "git+https://github.com/f0rr0/gpu-postal.git", "directory": "packages/core" },
+  "description": "Experimental WebGPU postal-address parser",
   "type": "module",
   "files": [
-    "dist"
+    "dist", "model.bin", "LICENSE", "MODEL_CARD.md", "THIRD_PARTY_NOTICES.md"
   ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    }
+    },
+    "./model.bin": "./model.bin"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "test": "node --test test/runtime.test.mjs"
-  },
-  "dependencies": {
-    "onnxruntime-web": "1.29.0"
+    "test": "node --test test/runtime.test.mjs",
+    "prepack": "npm run build && node pack.mjs"
   },
   "devDependencies": {
+    "@webgpu/types": "0.1.66",
     "typescript": "7.0.2"
   }
 }

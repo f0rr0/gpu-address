@@ -1,4 +1,4 @@
-# Learnings from gpu-address
+# Learnings from gpu-postal
 
 Written 16 September 2026. Research is closed; [publication remains pending](closeout.md).
 This records completed experiments and decisions, not a new improvement roadmap.

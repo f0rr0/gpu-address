@@ -1,9 +1,13 @@
 # Research
 
-Research is closed. Start with the [closeout and publication plan](closeout.md).
-The improvement and data plans below are historical, not active work.
+Current release: [gpu-postal model card](../MODEL_CARD.md),
+[release qualification](evidence/release-qualification-20260917.json), and
+[seven-country training recipe](english-seven-release.md).
+The [worldwide closeout](closeout.md) and earlier improvement/data plans below
+are historical. The seven-country run is complete; no further training is scheduled.
 
 - [Project learnings](learnings.md): domain fit, experiment outcomes and mistakes to avoid.
+- [Normalization and augmentation prior art](address-normalization-prior-art.md): inspected GitHub resources, postal references, reuse limits and a bounded experiment.
 - [Former next plan and assumptions audit](address-next-research-plan.md).
 
 - [Training-data plan](address-data-plan.md): worldwide Latin-script coverage, large-corpus retention, and quality checks.

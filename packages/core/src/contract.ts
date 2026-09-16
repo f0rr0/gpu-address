@@ -1,13 +1,21 @@
 export type Offset = [number, number];
 export interface Component { label: string; start: number; end: number; raw: string }
-export interface Decoder {
-  labels: string[];
-  transitions: number[][];
-  allowed: number[][];
-  start: number[];
-  end: number[];
-  start_allowed: number[];
-  gap_features: boolean;
+
+const fields = [
+  'street_address', 'locality', 'city', 'district', 'state', 'postcode', 'country',
+] as const;
+export const labels = ['O', ...fields.flatMap(field => [`B-${field}`, `I-${field}`])];
+const startAllowed = new Float32Array(labels.length);
+const allowed = new Float32Array(labels.length * labels.length);
+for (let next = 0; next < labels.length; next++) {
+  const tag = labels[next];
+  if (!tag.startsWith('I-')) continue;
+  startAllowed[next] = -10000;
+  for (let previous = 0; previous < labels.length; previous++) {
+    if (labels[previous] !== `B-${tag.slice(2)}` && labels[previous] !== tag) {
+      allowed[previous * labels.length + next] = -10000;
+    }
+  }
 }
 
 export function tokenize(text: string): Offset[] {
@@ -26,31 +34,44 @@ export function tokenize(text: string): Offset[] {
   return offsets;
 }
 
-export function decode(emissions: number[][], decoder: Decoder): number[] {
-  const labels = decoder.labels.length;
-  let scores = decoder.start.map((value, i) => value + decoder.start_allowed[i] + emissions[0][i]);
+export function decode(
+  emissions: number[][],
+  transitions: Float32Array,
+  starts: Float32Array,
+  ends: Float32Array,
+): number[] {
+  let scores = Array.from(
+    starts,
+    (value, i) => Math.fround(Math.fround(value + startAllowed[i]) + emissions[0][i]),
+  );
   const history: number[][] = [];
-  for (let t = 1; t < emissions.length; t++) {
-    const next = new Array(labels).fill(-Infinity);
-    const previous = new Array(labels);
-    for (let j = 0; j < labels; j++) {
-      for (let i = 0; i < labels; i++) {
-        const score = scores[i] + decoder.transitions[i][j] + decoder.allowed[i][j] + emissions[t][j];
-        if (score > next[j]) { next[j] = score; previous[j] = i; }
+  for (let token = 1; token < emissions.length; token++) {
+    const next = new Array(labels.length).fill(-Infinity);
+    const previous = new Array<number>(labels.length);
+    for (let target = 0; target < labels.length; target++) {
+      for (let source = 0; source < labels.length; source++) {
+        let score = Math.fround(scores[source] + transitions[source * labels.length + target]);
+        score = Math.fround(score + allowed[source * labels.length + target]);
+        score = Math.fround(score + emissions[token][target]);
+        if (score > next[target]) { next[target] = score; previous[target] = source; }
       }
     }
     scores = next;
     history.push(previous);
   }
   let last = 0;
-  for (let i = 1; i < labels; i++) if (scores[i] + decoder.end[i] > scores[last] + decoder.end[last]) last = i;
+  for (let i = 1; i < labels.length; i++) {
+    if (Math.fround(scores[i] + ends[i]) > Math.fround(scores[last] + ends[last])) last = i;
+  }
   const result = [last];
-  for (let t = history.length - 1; t >= 0; t--) { last = history[t][last]; result.push(last); }
+  for (let token = history.length - 1; token >= 0; token--) {
+    last = history[token][last];
+    result.push(last);
+  }
   return result.reverse();
 }
 
-
-export function encode(text: string, decoder: Decoder) {
+export function encode(text: string, gapFeatures = false) {
   if (typeof text !== 'string') throw new TypeError('Expected an address string');
   if (Array.from(text).length > 512 || /[\uD800-\uDFFF]/u.test(text)) return null;
   const offsets = tokenize(text);
@@ -61,18 +82,18 @@ export function encode(text: string, decoder: Decoder) {
     const raw = encoder.encode(text.slice(start, end));
     if (raw.length > 64) return null;
     const gap = text.slice(i ? offsets[i - 1][1] : 0, start);
-    const prefix = decoder.gap_features ? (/[\r\n]/u.test(gap) ? [11] : gap ? [33] : []) : [];
-    bytes.push([...prefix, ...Array.from(raw, b => b + 1)]);
+    const prefix = gapFeatures ? (/[\r\n]/u.test(gap) ? [11] : gap ? [33] : []) : [];
+    bytes.push([...prefix, ...Array.from(raw, byte => byte + 1)]);
   }
-  const width = Math.max(...bytes.map(b => b.length));
-  return { offsets, width, inputs: bytes.map(b => b.concat(Array(width - b.length).fill(0))) };
+  const width = Math.max(...bytes.map(byte => byte.length));
+  return { offsets, width, inputs: bytes.map(byte => byte.concat(Array(width - byte.length).fill(0))) };
 }
 
-export function components(path: number[], offsets: Offset[], text: string, decoder: Decoder): Component[] {
+export function components(path: number[], offsets: Offset[], text: string): Component[] {
   const result: Component[] = [];
   let previous = 'O';
   for (const [i, label] of path.entries()) {
-    const tag = decoder.labels[label];
+    const tag = labels[label];
     if (tag !== 'O') {
       const [start, end] = offsets[i];
       const field = tag.slice(2);
@@ -85,17 +106,4 @@ export function components(path: number[], offsets: Offset[], text: string, deco
     previous = tag;
   }
   return result;
-}
-
-export function validateDecoder(value: unknown): asserts value is Decoder {
-  if (!value || typeof value !== 'object') throw new TypeError('Invalid decoder');
-  const d = value as Decoder;
-  if (!Array.isArray(d.labels) || d.labels.length !== 41 || d.labels[0] !== 'O' ||
-      new Set(d.labels).size !== 41 || d.labels.some(x => typeof x !== 'string') ||
-      typeof d.gap_features !== 'boolean') throw new TypeError('Invalid decoder labels or configuration');
-  const vector = (v: unknown): boolean => Array.isArray(v) && v.length === d.labels.length && v.every(x => typeof x === 'number' && Number.isFinite(x));
-  if (![d.start, d.end, d.start_allowed].every(vector) ||
-      ![d.transitions, d.allowed].every(m => Array.isArray(m) && m.length === d.labels.length && m.every(vector))) {
-    throw new TypeError('Invalid decoder dimensions or weights');
-  }
 }

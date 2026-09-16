@@ -3,22 +3,25 @@ requires = ["uv_build>=0.12.13,<0.13"]
 build-backend = "uv_build"
 
 [project]
-name = "gpu-address"
+name = "gpu-postal"
 version = "0.1.0"
 description = "Small postal-address models for browser inference"
+license = "MIT"
 readme = "README.md"
 requires-python = ">=3.11,<3.14"
-dependencies = ["torch==2.14.0", "numpy==2.4.6"]
-
-[project.optional-dependencies]
-data = ["rdflib==7.6.0", "pyarrow==25.0.1"]
-export = ["onnx==1.22.0", "onnxruntime==1.30.0", "brotli==1.2.0"]
+dependencies = [
+  "brotli==1.2.0",
+  "numpy==2.4.6",
+  "pyarrow==25.0.1",
+  "rdflib==7.6.0",
+  "torch==2.14.0",
+]
 
 [dependency-groups]
-dev = ["ruff==0.16.7", "ty==0.0.80", "pytest==9.1.1"]
+dev = ["pytest==9.1.1", "ruff==0.16.7", "ty==0.0.80"]
 
 [project.scripts]
-gpu-address = "gpu_address.cli:main"
+gpu-postal = "gpu_postal.cli:main"
 
 [tool.uv.build-backend]
 module-root = "packages/training/src"

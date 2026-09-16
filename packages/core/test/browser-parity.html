@@ -1,0 +1,77 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>gpu-postal WebGPU parity</title>
+<pre id="result">running</pre>
+<script type="module">
+  import { createParser } from '../dist/index.js';
+  import { encode, labels } from '../dist/contract.js';
+  import { readModel } from '../dist/model.js';
+
+  const result = document.querySelector('#result');
+  try {
+    const base = new URLSearchParams(location.search).get('export');
+    if (!base) throw new Error('Pass ?export=/path/to/export');
+    const info = (await navigator.gpu.requestAdapter())?.info;
+    const adapter = info ? {
+      vendor: info.vendor, architecture: info.architecture, device: info.device,
+      description: info.description, isFallbackAdapter: info.isFallbackAdapter,
+    } : null;
+    const reports = [];
+    for (const suffix of ['.f32', '']) {
+      const response = await fetch(base + '/fixtures' + suffix + '.json');
+      if (!response.ok) throw new Error('Fixture HTTP ' + response.status);
+      const fixtures = await response.json();
+      if (!fixtures.length) throw new Error('No parity fixtures');
+      const modelResponse = await fetch(base + '/model' + suffix + '.bin');
+      if (!modelResponse.ok) throw new Error('Model HTTP ' + modelResponse.status);
+      const bytes = new Uint8Array(await modelResponse.arrayBuffer());
+      const model = readModel(bytes);
+      const started = performance.now();
+      const parser = await createParser(bytes);
+      const setupMs = performance.now() - started;
+      try {
+        for (const fixture of fixtures) {
+          const expected = fixture.components.map(field => ({
+            ...field,
+            start: Array.from(fixture.text).slice(0, field.start).join('').length,
+            end: Array.from(fixture.text).slice(0, field.end).join('').length,
+          }));
+          const actual = (await parser.parse(fixture.text)).components;
+          if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+            throw new Error((suffix || 'int8') + ' GPU spans differ: ' + JSON.stringify(fixture.text));
+          }
+          const encoded = encode(fixture.text, model.gapFeatures);
+          const path = encoded.offsets.map(([start, end]) => {
+            const field = actual.find(field => field.start <= start && end <= field.end);
+            return field ? labels.indexOf((start === field.start ? 'B-' : 'I-') + field.label) : 0;
+          });
+          if (JSON.stringify(path) !== JSON.stringify(fixture.path)) {
+            throw new Error((suffix || 'int8') + ' reconstructed GPU BIO path differs');
+          }
+        }
+        const timings = [];
+        for (let i = 0; i < 100; i++) {
+          const started = performance.now();
+          await parser.parse(fixtures[i % fixtures.length].text);
+          timings.push(performance.now() - started);
+        }
+        timings.sort((a, b) => a - b);
+        reports.push({
+          encoding: suffix ? 'float32' : 'int8',
+          fixtures: fixtures.length,
+          gpuComponentsEqual: true,
+          reconstructedBioPathsEqual: true,
+          setupMs,
+          warmMedianMs: timings[50],
+          scope: 'Fixture parity and mixed-fixture timings; not trained-model accuracy or a representative latency benchmark',
+        });
+      } finally {
+        await parser.dispose();
+      }
+    }
+    result.textContent = JSON.stringify({ status: 'passed', browser: navigator.userAgent, adapter, reports });
+  } catch (error) {
+    result.textContent = JSON.stringify({ status: 'failed', error: String(error) });
+    throw error;
+  }
+</script>

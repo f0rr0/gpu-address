@@ -1,14 +1,13 @@
 {
-  "name": "gpu-address-monorepo",
+  "name": "gpu-postal-monorepo",
   "private": true,
   "type": "module",
   "workspaces": [
-    "packages/core",
-    "apps/*"
+    "packages/core"
   ],
   "scripts": {
-    "build": "npm run build --workspace gpu-address",
-    "test": "npm run build && npm test --workspace gpu-address",
+    "build": "npm run build --workspace packages/core",
+    "test": "npm run build && npm test --workspace packages/core",
     "test:parity": "node packages/core/test/parity.mjs"
   },
   "engines": {

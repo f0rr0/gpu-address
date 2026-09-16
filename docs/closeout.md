@@ -1,5 +1,10 @@
 # Closeout and publication plan
 
+**Superseded for active work:** the user reopened a narrower seven-country training
+and publication effort on 16 September 2026. Follow [that plan](english-seven-release.md).
+This document preserves the previous closeout decision; its no-training and archive
+instructions are not active while the new run is underway.
+
 Decision: 16 September 2026. **Research closed; publication pending.**
 This supersedes every active data-acquisition, training and improvement roadmap.
 
@@ -54,7 +59,7 @@ snapshot. This packaging work is pending, not already implemented.
 
 ## 3. Package the evidence once
 
-Prepare a single research release on the existing `f0rr0/gpu-address` GitHub repository:
+Prepare a single research release on the existing `f0rr0/gpu-postal` GitHub repository:
 
 - A compact README/model card: intended Latin-script scope, seven public fields,
   unsupported inputs, no validation/confidence guarantee, country/source limitations.

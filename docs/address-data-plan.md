@@ -154,7 +154,7 @@ Other consumers of `load()` retain their existing list behavior.
 
 ### Acquisition and audit record
 
-`gpu-address corpus inventory|audit|coverage` now implements the first stage, using
+`gpu-postal corpus inventory|audit|coverage` now implements the first stage, using
 the existing PyArrow dependency and stdlib SQLite for disk-backed collision counts.
 The current inventory is `data/latin-20260915/inventory.json`: 249 ISO countries and
 territories, 240 represented in this source, 247 shards, 19,824,796,303 compressed bytes.
@@ -472,7 +472,7 @@ issues, not evidence that such addresses are invalid. No global keyword relabeli
 new output field was added. The user's example is a development regression fixture,
 not natural held-out evaluation evidence; its exact spans survive encoding/decoding.
 
-Ran `uv run gpu-address corpus conflicts --data data/latin-20260915 --countries in vn`.
+Ran `uv run gpu-postal corpus conflicts --data data/latin-20260915 --countries in vn`.
 The new per-shard `conflicts.jsonl.gz` files preserve every candidate occurrence:
 India has 9 conflicting exact texts across 186 rows; Vietnam has 10 across 527 rows.
 These are review queues, not adjudicated labels or a deduplicated corpus. Original
@@ -502,7 +502,7 @@ kilometre locators; bare city/street homonyms must remain uncertain without cont
 
 ### Global consolidation and fresh review — September 15
 
-`gpu-address consolidate` completed all 14 audited shards without a retention cap.
+`gpu-postal consolidate` completed all 14 audited shards without a retention cap.
 The completion manifest is `data/latin-20260915/consolidated-v2/report.json`:
 
 - 7,320,483 input candidate occurrences; 5,076,985 unique exact text/label pairs.
@@ -519,7 +519,7 @@ not be consumed. No historical corpus or checkpoint was overwritten.
 Reproduction (run from repository root with a new output directory):
 
 ```sh
-uv run gpu-address consolidate --data data/latin-20260915 \
+uv run gpu-postal consolidate --data data/latin-20260915 \
   --output data/latin-20260915/consolidated-v2 \
   --protected data/multisource/public-benchmark.jsonl.gz \
   data/multisource/dev.jsonl.gz data/multisource/source-dev.jsonl.gz \

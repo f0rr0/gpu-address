@@ -1,0 +1,27 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; connect-src 'self'">
+<title>gpu-postal example</title>
+<h1>gpu-postal</h1>
+<p>Experimental field suggestions, not address validation. Review before use. Inference stays in this browser.</p>
+<label for="address">Address</label>
+<textarea id="address" rows="4" cols="60">123 Main Street, Boston MA 02110</textarea>
+<button id="parse" disabled>Loading model…</button>
+<pre id="result" aria-live="polite"></pre>
+<script type="module">
+import { createParser } from '../packages/core/dist/index.js';
+const button = document.querySelector('#parse'), output = document.querySelector('#result');
+try {
+  const parser = await createParser();
+  button.disabled = false;
+  button.textContent = 'Suggest fields';
+  button.onclick = async () => {
+    button.disabled = true;
+    try { output.textContent = JSON.stringify(await parser.parse(document.querySelector('#address').value), null, 2); }
+    catch (error) { output.textContent = String(error); }
+    finally { button.disabled = false; }
+  };
+  window.addEventListener('pagehide', () => { void parser.dispose(); });
+} catch (error) { button.textContent = 'Unavailable'; output.textContent = String(error); }
+</script>

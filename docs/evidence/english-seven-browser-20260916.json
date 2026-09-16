@@ -1,0 +1,15 @@
+{
+  "run": "runs/ordered-h128-english-seven-20260916",
+  "epoch": 12,
+  "checkpoint_sha256": "436dc0a84fca3816a851f28a5eb56d716153acc993748ddc16768e7c6502e7ec",
+  "model_int8_sha256": "4ca878842b0eef37037f9ca5fa8f77096b54bb5ff34c42d4c3927d99b7a65624",
+  "model_float32_sha256": "f3986d83ee1a7cec08037632aa50f1cf957dad093c287c80f9c45d504542aa8a",
+  "status": "passed",
+  "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/152.0.0.0 Safari/537.36",
+  "adapter": {"vendor": "apple", "architecture": "metal-3", "device": "", "description": "", "isFallbackAdapter": false},
+  "reports": [
+    {"encoding": "float32", "bytes": 617804, "fixtures": 29, "gpuComponentsEqual": true, "reconstructedBioPathsEqual": true, "setupMs": 304.80000001192093, "warmMedianMs": 2},
+    {"encoding": "int8", "bytes": 154562, "fixtures": 29, "gpuComponentsEqual": true, "reconstructedBioPathsEqual": true, "setupMs": 3.300000011920929, "warmMedianMs": 1.7000000476837158}
+  ],
+  "scope": "Observed existing browser-parity.html in Codex Chromium on local Mac. 100 mixed-fixture timing calls per encoding. Exact components/UTF-16 spans and reconstructed BIO paths match Python fixtures. Not exhaustive numerical equivalence, representative latency, all-browser compatibility, or model accuracy. Sequential warm-cache setup times are not a cold-start comparison."
+}

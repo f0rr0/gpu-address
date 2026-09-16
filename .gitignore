@@ -7,3 +7,7 @@ node_modules/
 dist/
 data/
 runs/
+*.tgz
+packages/core/LICENSE
+packages/core/MODEL_CARD.md
+packages/core/THIRD_PARTY_NOTICES.md

@@ -1,0 +1,13 @@
+{
+  "scope": "Seven freshly collected public institution addresses, annotated before inference by AI; not blind human gold or a population benchmark. Messy variants only remove commas and lowercase text. No time-saving claim.",
+  "collected": "2026-09-17",
+  "cases": [
+    {"country":"US","source":"https://naturalhistory.si.edu/visit","text":"10th St. & Constitution Ave. NW, Washington, D.C. 20560","fields":{"street_address":"10th St. & Constitution Ave. NW","city":"Washington","state":"D.C.","postcode":"20560"}},
+    {"country":"GB","source":"https://www.sciencemuseum.org.uk/see-and-do/welcome-back","text":"Exhibition Road, South Kensington, London, SW7 2DD","fields":{"street_address":"Exhibition Road","locality":"South Kensington","city":"London","postcode":"SW7 2DD"}},
+    {"country":"AU","source":"https://www.nma.gov.au/visit","text":"Lawson Crescent, Acton, ACT","fields":{"street_address":"Lawson Crescent","city":"Acton","state":"ACT"},"note":"Acton is the sole postal locality, following the existing G-NAF city convention; no missing postcode inferred."},
+    {"country":"NZ","source":"https://www.tepapa.govt.nz/visit/plan-your-visit/getting-here","text":"55 Cable Street, Wellington 6011, New Zealand","fields":{"street_address":"55 Cable Street","city":"Wellington","postcode":"6011","country":"New Zealand"}},
+    {"country":"CA","source":"https://www.rom.on.ca/contact-us","text":"100 Queen’s Park, Toronto, ON M5S 2C6, Canada","fields":{"street_address":"100 Queen’s Park","city":"Toronto","state":"ON","postcode":"M5S 2C6","country":"Canada"}},
+    {"country":"IE","source":"https://www.nationalgallery.ie/","text":"Merrion Square West, Dublin 2, Ireland","fields":{"street_address":"Merrion Square West","city":"Dublin 2","country":"Ireland"},"note":"Dublin 2 is one city span under our existing postal-locality policy."},
+    {"country":"ZA","source":"https://www.iziko.org.za/museums/south-african-museum/","text":"25 Queen Victoria Street, Gardens, Cape Town","fields":{"street_address":"25 Queen Victoria Street","locality":"Gardens","city":"Cape Town"}}
+  ]
+}

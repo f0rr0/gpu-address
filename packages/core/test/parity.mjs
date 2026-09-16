@@ -1,49 +1,28 @@
-// Node harness for the same onnxruntime-web Wasm backend used in browsers.
-// This verifies backend parity; it is not a Safari/Chromium performance result.
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
-import * as ort from 'onnxruntime-web';
-import { decode, encode, components } from '../dist/contract.js';
-import { createParser } from '../dist/index.js';
+import { components, decode, encode } from '../dist/contract.js';
+import { readModel, WEIGHT_COUNT } from '../dist/model.js';
 
 const [directory] = process.argv.slice(2);
 if (!directory) throw new Error('Usage: npm run test:parity -- EXPORT_DIRECTORY');
-ort.env.wasm.numThreads = 1;
-const fixture = JSON.parse(fs.readFileSync(path.join(directory, 'fixtures.json'), 'utf8'));
-const decoder = JSON.parse(fs.readFileSync(path.join(directory, 'decoder.json'), 'utf8'));
-const session = await ort.InferenceSession.create(fs.readFileSync(path.join(directory, 'model.onnx')), {
-  executionProviders: ['wasm'],
-});
+for (const suffix of [".f32", ""]) {
+  const fixture = JSON.parse(fs.readFileSync(path.join(directory, `fixtures${suffix}.json`), "utf8"));
+  const model = readModel(fs.readFileSync(path.join(directory, `model${suffix}.bin`)));
+  assert.equal(model.weights.length, WEIGHT_COUNT);
+  for (const item of fixture) {
+    const encoded = encode(item.text, model.gapFeatures);
+    assert.deepEqual([encoded.inputs], item.byte_ids, 'JS tokenization differs from Python');
+    const labels = decode(item.emissions[0], model.transitions, model.start, model.end);
+    assert.deepEqual(labels, item.path, 'JS CRF decoding differs from Python');
+    const fields = components(labels, encoded.offsets, item.text);
+    const expected = item.components.map(field => ({
+      ...field,
+      start: Array.from(item.text).slice(0, field.start).join('').length,
+      end: Array.from(item.text).slice(0, field.end).join('').length,
+    }));
+    assert.deepEqual(fields, expected, 'UTF-16 field offsets differ');
+  }
 
-const parser = await createParser(fs.readFileSync(path.join(directory, 'model.onnx')), decoder);
-let maxError = 0;
-for (const item of fixture) {
-  const { offsets, inputs, width } = encode(item.text, decoder);
-  assert.deepEqual([inputs], item.byte_ids, 'JS tokenization/encoding differs from Python');
-  const result = await session.run({
-    byte_ids: new ort.Tensor('int64', BigInt64Array.from(inputs.flat(), BigInt), [1, inputs.length, width]),
-    lengths: new ort.Tensor('int64', BigInt64Array.from([inputs.length], BigInt), [1]),
-  });
-  const values = Array.from(result.emissions.data);
-  const expected = item.emissions.flat(2);
-  for (let i = 0; i < values.length; i++) maxError = Math.max(maxError, Math.abs(values[i] - expected[i]));
-  const emissions = inputs.map((_, t) => values.slice(t * decoder.labels.length, (t + 1) * decoder.labels.length));
-  const labels = decode(emissions, decoder);
-  assert.deepEqual(labels, item.path, 'Wasm sequence prediction differs');
-  const fields = components(labels, offsets, item.text, decoder);
-  const expectedFields = item.components.map(field => ({ ...field,
-    start: Array.from(item.text).slice(0, field.start).join('').length,
-    end: Array.from(item.text).slice(0, field.end).join('').length,
-  }));
-  assert.deepEqual(fields, expectedFields, 'UTF-16 field offsets differ');
-  assert.deepEqual((await parser.parse(item.text)).components, expectedFields, 'Public API parity differs');
+  console.log(JSON.stringify({ encoding: suffix ? "float32" : "int8", fixtures: fixture.length, weights: model.weights.length, pathsEqual: true, utf16SpansEqual: true, scope: "Model format, tokenizer, and CRF parity; GPU numerical parity needs a browser" }));
 }
-assert(maxError < 1e-4, `Wasm logits error ${maxError}`);
-const report = { fixtures: fixture.length, maxAbsError: maxError, pathsEqual: true, utf16SpansEqual: true,
-  backend: 'onnxruntime-web/wasm under Node; one thread',
-  scope: 'Float export parity only; not browser performance or complete package qualification' };
-console.log(JSON.stringify(report, null, 2));
-await session.release();
-await parser.dispose();
-await assert.rejects(parser.parse("12 Main St"), /disposed/);
