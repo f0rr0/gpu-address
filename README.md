@@ -1,13 +1,13 @@
 # gpu-postal
 
-Tiny, local postal-address field suggestions for the browser. Experimental—not
-address validation, geocoding, autocomplete, or a replacement for libpostal.
+A small neural address parser for the browser. Split an address into fields with
+WebGPU in 74.4 kB (Brotli), including the model and runtime, with zero runtime
+dependencies. Your input stays on your device.
 
-The frozen **epoch-12 int8 GPA3** model has 154,446 parameters and **154,562 bytes
-of weights**. Inference uses WebGPU, with no runtime dependencies, Wasm, inference
-server or API key. Review every result before use.
+Use it to turn a pasted address into editable form fields or highlight address
+components in text.
 
-## Use
+## Usage
 
 ```sh
 npm install gpu-postal@experimental
@@ -16,61 +16,81 @@ npm install gpu-postal@experimental
 ```js
 import { createParser } from 'gpu-postal';
 
-const parser = await createParser(); // loads the included weights once
+const parser = await createParser();
 const result = await parser.parse('123 Main Street, Boston MA 02110');
-console.log(result.components); // { label, raw, start, end }[]
-await parser.dispose();
+
+console.log(result.components);
+// [
+//   { label: 'street_address', raw: '123 Main Street', start: 0, end: 15 },
+//   { label: 'city', raw: 'Boston', start: 17, end: 23 },
+//   { label: 'state', raw: 'MA', start: 24, end: 26 },
+//   { label: 'postcode', raw: '02110', start: 27, end: 32 }
+// ]
+
+await parser.dispose(); // when finished with the parser
 ```
 
-Requires WebGPU and HTTPS or localhost. Bundlers must preserve the adjacent model
-asset; alternatively serve the included `model.bin` yourself and pass its URL or
-bytes to `createParser`. No CPU fallback. See the [API](packages/core/README.md).
+Create one parser and reuse it. Requires a WebGPU browser over HTTPS or localhost;
+there is no CPU fallback. The package includes the model. If your bundler doesn't
+copy `model.bin`, serve it yourself and call `createParser('/models/model.bin')`.
+You can also pass an `ArrayBuffer` or `Uint8Array`.
 
-Seven fields: `street_address`, `locality`, `city`, `district`, `state`, `postcode`,
-`country`. Results preserve original text and UTF-16 offsets. `unassessed` means
-predicted, **not verified**; `unsupported` only describes input limits, not reliable
-country/language detection. Missing fields are not completed.
+## Output
 
-## Evidence, with limits
+`parse(text)` returns `{ status, components, offsetEncoding: 'utf-16' }`.
+Each component contains a label, the original text and offsets compatible with
+`text.slice(start, end)`. Components follow input order; labels can repeat.
 
-Trained from scratch on 3,790,046 rows from US, UK, Australia, New Zealand, Canada,
-Ireland and English-language South African sources. This is training scope, not
-equal accuracy across countries. Proper names are retained. Other countries and
-general multilingual inputs are out of scope.
+Labels: `street_address`, `locality`, `city`, `district`, `state`, `postcode`,
+`country`. Street address includes building, unit, floor and PO-box information.
 
-| Check | Result | What it does not establish |
-| --- | ---: | --- |
-| Same-source heldout int8 | 12,019 / 12,115 (99.21%) | Real-world accuracy |
-| External US GeoSearch, actual browser int8 | 879 / 1,000 (87.9%) | Worldwide or natural-traffic accuracy |
-| Four fields present / partial | 720 / 770; 159 / 230 | Reliable incomplete-address handling |
-| Warm browser median / p95 | 2.2 / 3.2 ms | Other devices, cold startup, GPU superiority |
+Successful predictions have `status: 'unassessed'`. Empty or oversized inputs
+return `status: 'unsupported'` and an empty component array. Limits are 512 Unicode
+code points, 128 tokens and 64 UTF-8 bytes per token; invalid Unicode is unsupported.
+GPU and loading failures throw errors.
 
-Timings: 1,000 sequential inputs, M1 Pro 16 GB, Chromium 152, Apple Metal hardware
-adapter. Runtime JavaScript plus weights: **174,699 uncompressed body bytes**;
-model-only size is not total download size. See the
-[model card](MODEL_CARD.md) and [release evidence](docs/evidence/release-qualification-20260917.json).
-The float32 comparator scored 879/1,000, Senzing 877/1,000 and Deepparse 752/1,000
-on this same diagnostic. This is not evidence of general superiority over either.
+## Model and performance
 
-The intended experiment is **paste an address → review suggested fields**. Do not
-silently use these predictions for shipping or bulk database cleanup. A small
-AI-annotated public-address workflow check matched 13/14 inputs, including one
-case-only/comma-removal variant per address. It is not human usability evidence.
-See [all inputs and sources](docs/evidence/release-workflow-20260917.json).
+We trained the 154,446-parameter model from scratch on 3.79 million addresses from
+the US, UK, Australia, New Zealand, Canada, Ireland and English-language South
+African sources. It combines byte convolutions, bidirectional scans and CRF
+decoding. We quantize weights to five bits, store the codes in byte slots for
+Brotli compression, and run inference in float32.
 
-## Run locally
+| Measurement | Result |
+| --- | ---: |
+| Model weights | 69.0 kB (Brotli) |
+| JavaScript + weights | 74.4 kB (Brotli) |
+| Warm parse latency, median / p95 | 2.9 / 4.5 ms |
+| Same-source held-out exact span accuracy | 99.17% |
+| External US GeoSearch exact field accuracy | 87.7% |
+
+Sizes use Brotli quality 11 on each built JavaScript file and the model:
+74,350 bytes total (Brotli), excluding HTTP headers. Serve with
+`Content-Encoding: br` to deliver Brotli-compressed assets.
+Browser timings use an M1 Pro, Chromium 152 and 1,000 sequential inputs.
+GeoSearch contains synthetic address noise; its score measures complete field
+matches after ignoring case, commas and whitespace.
+
+On GeoSearch inputs with all four fields present, the model matched 92.7% of
+addresses. This experimental release targets editable field suggestions;
+partial inputs and country-level generalization remain areas for improvement.
+Address validation and deliverability checks require separate services. See the
+[model card](https://github.com/f0rr0/gpu-postal/blob/main/MODEL_CARD.md) for
+country results, comparisons and evaluation details.
+
+## Development
+
+Node.js 22+:
 
 ```sh
 npm ci
 npm test
 python3 -m http.server 8765 --bind 127.0.0.1
-# Open http://127.0.0.1:8765/examples/basic.html
+# Open http://localhost:8765/examples/basic.html
 ```
 
-The [minimal example](examples/basic.html) is a source example, not a hosted product
-demo. It uses the real included model; input is not sent to a server for inference.
-
-Python is local training machinery, not required by browser consumers:
+For the Python training tools (Python 3.11+):
 
 ```sh
 uv sync --locked
@@ -78,21 +98,12 @@ uv run pytest
 uv run gpu-postal --help
 ```
 
-Python 3.11+, Node 22+. Training uses PyTorch MPS on the M1 Pro; PyTorch retains
-its hardware-aware CPU thread default. The [training recipe](docs/english-seven-release.md)
-records the full 12-epoch run and selection criterion. It stopped at its epoch
-budget while still improving, not demonstrated convergence.
+## License
 
-## License and reporting
+[MIT](https://github.com/f0rr0/gpu-postal/blob/main/LICENSE) for original code.
+The included model retains its
+[source notices and conditions](https://github.com/f0rr0/gpu-postal/blob/main/THIRD_PARTY_NOTICES.md),
+including G-NAF attribution and mailing-use restrictions.
 
-Original code/documentation: [MIT](LICENSE), © 2026 Sid Jain. **Model/source-data
-notices and restrictions remain applicable**: [third-party notices](THIRD_PARTY_NOTICES.md).
-The package is not an unrestricted MIT-only bundle. No raw training corpus is shipped.
-
-[Report a parsing issue](https://github.com/f0rr0/gpu-postal/issues) with a public
-or redacted address, expected fields and output. Never post private addresses.
-Country results, known failures and source limitations belong in reports, not
-hidden behind one headline accuracy number.
-
-[Research history](docs/README.md) · [Learnings](docs/learnings.md) ·
-[Historical worldwide closeout](docs/closeout.md)
+Inspired by [GPU Lexer](https://github.com/vercel-labs/gpu-lexer) and
+[GPU Time](https://github.com/arikchakma/gpu-time).

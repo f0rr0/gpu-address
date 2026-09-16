@@ -1,7 +1,0 @@
-{
-  "scope": "Linux CPU 4 threads; 512 prefix examples, batch64, 5 warmup and 40 timed steps; fresh model; not accuracy or Mac result",
-  "encode_512_ms": 64.1310540959239,
-  "batch_preparation_median_ms": 2.9896710766479373,
-  "forward_backward_optimizer_median_ms": 63.945119036361575,
-  "torch": "2.14.0+cpu"
-}

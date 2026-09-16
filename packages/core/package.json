@@ -1,12 +1,20 @@
 {
   "name": "gpu-postal",
-  "version": "0.1.0-experimental.1",
+  "version": "0.1.0-experimental.2",
   "license": "SEE LICENSE IN THIRD_PARTY_NOTICES.md",
-  "repository": { "type": "git", "url": "git+https://github.com/f0rr0/gpu-postal.git", "directory": "packages/core" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/f0rr0/gpu-postal.git",
+    "directory": "packages/core"
+  },
   "description": "Experimental WebGPU postal-address parser",
   "type": "module",
   "files": [
-    "dist", "model.bin", "LICENSE", "MODEL_CARD.md", "THIRD_PARTY_NOTICES.md"
+    "dist",
+    "model.bin",
+    "LICENSE",
+    "MODEL_CARD.md",
+    "THIRD_PARTY_NOTICES.md"
   ],
   "exports": {
     ".": {

@@ -34,26 +34,37 @@ const quantile = (times, p) => times[Math.ceil(times.length * p) - 1];
 let parser;
 try {
   performance.setResourceTimingBufferSize(2000);
+  const bits = new URL(location.href).searchParams.get('bits');
+  assert(bits === null || ['5', '6'].includes(bits), 'Expected bits=5 or bits=6');
+  const candidate = bits ? `/runs/ordered-h128-english-seven-20260916/int${bits}-probe/` : null;
+  const modelUrl = candidate ? candidate + 'model.bin' : '../model.bin';
   const start = performance.now();
-  parser = await createParser();
+  parser = await createParser(modelUrl);
   const initializationMs = performance.now() - start;
   const first = performance.now();
   await parser.parse('123 Main Street, Boston MA 02110');
   const firstParseMs = performance.now() - first;
   const adapter = await navigator.gpu.requestAdapter();
   const adapterInfo = adapter.info;
-  const model = await fetch('../model.bin', {cache:'no-store'}).then(r => {
+  const model = await fetch(modelUrl, {cache:'no-store'}).then(r => {
     assert(r.ok, 'model fetch failed'); return r.arrayBuffer();
   });
   const modelSha256 = await sha(model);
-  assert(modelSha256 === '4ca878842b0eef37037f9ca5fa8f77096b54bb5ff34c42d4c3927d99b7a65624', 'Wrong release model');
+  const expectedHashes = {
+    '8': '4ca878842b0eef37037f9ca5fa8f77096b54bb5ff34c42d4c3927d99b7a65624',
+    '6': '163868e5de943fbbda0f43e718cd70ee48fd21da391d1c3de9b589f7f64fb2b8',
+    '5': 'e97cfb86c5ec703ad70ba684f2f373a44dc9c9e1018e517ab6799e74aa5ce84a',
+  };
+  assert(modelSha256 === expectedHashes[bits || '5'], 'Wrong model');
   const base = '/data/geosearch-sample-20260916/';
   const records = await json(base + 'inputs.json');
   const baseline = await json(base + 'ours12-predictions.json');
   assert(records.length === 1000 && baseline.length === 1000, 'Wrong frozen sample size');
   assert(records.every(r => /^[\x00-\x7f]*$/.test(r.text)), 'Metric requires ASCII GeoSearch inputs');
   const previous = new Map(baseline.map(r => [r.id, r.predicted]));
-  const workflow = await json('/docs/evidence/release-workflow-20260917.json');
+  const python = candidate ? new Map((await json(candidate + 'geosearch-predictions.json'))
+    .map(r => [r.text, r[`int${bits}`]])) : null;
+  const workflow = await json('./release-workflow.json');
   const counts = { all: {n:0, exact:0}, four_fields_present:{n:0, exact:0}, partial:{n:0,exact:0} };
   let floatExact = 0, changed = 0;
   const predictions = [], times = [];
@@ -62,6 +73,7 @@ try {
     const started = performance.now();
     const predicted = (await parser.parse(row.text)).components;
     times.push(performance.now() - started);
+    if (python) assert(same(predicted, python.get(row.text)), `Python parity failed: ${row.text}`);
     const gold = fields(row.components), actual = fields(predicted);
     const group = same(Object.keys(gold), ['city','postcode','state','street_address']) ? 'four_fields_present' : 'partial';
     const exact = same(gold, actual);
@@ -89,8 +101,18 @@ try {
   const inferenceResourceRequests = performance.getEntriesByType('resource').length - before;
   assert(inferenceResourceRequests === 0, 'Inference generated resource requests');
   times.sort((a,b) => a-b);
+  let holdoutParity = 0;
+  if (candidate) {
+    const heldout = await json(candidate + 'holdout-predictions.json');
+    for (const row of heldout) {
+      const actual = (await parser.parse(row.text)).components;
+      assert(same(actual, row[`int${bits}`]), `Holdout parity failed: ${row.text}`);
+      holdoutParity++;
+      if (holdoutParity % 1000 === 0) result.textContent = `Holdout parity ${holdoutParity}/${heldout.length}`;
+    }
+  }
   document.querySelector('#predictions').textContent = JSON.stringify(predictions);
-  result.textContent = JSON.stringify({status:'passed',date:new Date().toISOString(),modelSha256,modelBytes:model.byteLength,
+  result.textContent = JSON.stringify({status:'passed',bits:bits || '5',holdoutParity,geosearchParity:python ? records.length : null,date:new Date().toISOString(),modelSha256,modelBytes:model.byteLength,
     browser:navigator.userAgent,adapter:{vendor:adapterInfo.vendor,architecture:adapterInfo.architecture,isFallbackAdapter:adapterInfo.isFallbackAdapter},
     initializationMs,firstParseMs,warm:{n:times.length,medianMs:quantile(times,.5),p95Ms:quantile(times,.95)},
     timingScope:'First parser instance in this page; localhost transfer; browser/driver shader cache not purged. Warm times are sequential, not batched.',

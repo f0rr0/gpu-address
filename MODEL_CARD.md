@@ -1,106 +1,150 @@
-# gpu-postal — epoch 12 research release
+# gpu-postal model card
 
-Version: `0.1.0-experimental.1`. Selected by equal-country mean exact ordered-span
-validation, not by external benchmark performance. Frozen model SHA-256:
-`4ca878842b0eef37037f9ca5fa8f77096b54bb5ff34c42d4c3927d99b7a65624`.
+gpu-postal parses addresses on the device with a 154,446-parameter neural model.
+The browser runtime has zero runtime dependencies and preserves the original text
+and character offsets for editable address forms and span highlighting.
+
+Model release: `0.1.0-experimental.2`, epoch 12, five-bit quantization.
+
+## Architecture and training
+
+The model combines ordered byte convolutions, two bidirectional affine-scan layers,
+seven-field BIO predictions and CRF decoding. GPA3 stores five-bit quantized values
+in signed byte slots, compressed with Brotli for delivery; the runtime
+expands them to float32 for WebGPU execution. A parser reuses its GPU resources
+across calls and processes requests in sequence.
+
+We trained from scratch on 3,790,046 addresses for 12 shuffled epochs using PyTorch
+MPS on an Apple M1 Pro with 16 GB memory. Training took 3.83 hours, with batch size
+128, seed 2026, case augmentation and inverse-country-frequency loss weights.
+We selected epoch 12 by equal-country mean exact ordered-span validation accuracy:
+99.0044%. Validation was still improving at the end of the 12-epoch budget.
+
+| Training source country | Rows |
+| --- | ---: |
+| US | 77,917 |
+| UK | 74,191 |
+| Australia | 1,297,093 |
+| New Zealand | 1,415,622 |
+| Canada | 2,225 |
+| Ireland | 50,883 |
+| South Africa | 872,115 |
+
+The training scope covers English-form addresses in these seven countries.
+Sources include rendered structured records and inherited tagged corpora.
+Street-group splits reduce overlap between training and evaluation. Source
+concentration, inherited label errors and possible entity overlap affect
+generalization. See [source notices](THIRD_PARTY_NOTICES.md) for attribution
+and transformations.
+
+## Output
+
+The parser returns seven fields: `street_address`, `locality`, `city`,
+`district`, `state`, `postcode` and `country`. Street address includes
+premises, road, unit, floor and PO-box information; district remains a separate
+field. Each component includes its original text and UTF-16 offsets.
+
+Use the predictions to populate editable fields. The API marks predictions
+`unassessed` and provides no calibrated confidence score. Address existence,
+deliverability and missing-field completion require separate services.
+
+## Evaluation
+
+On the same-source street-group holdout, the deployed int5 model matched
+**12,014 of 12,115 addresses (99.17%)** by exact ordered spans, compared with
+12,022 for float32.
+
+### External US addresses
+
+We evaluated the browser model on a frozen 1,000-address GeoSearch sample with
+synthetic noise. Counts below require all fields to match, using per-field token
+multisets that ignore case, commas and whitespace.
+
+| Input group | Rows | gpu-postal int5 | gpu-postal float32 | Senzing v1.2 | Deepparse BPEmb + attention |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| All | 1,000 | 877 | 879 | 877 | 752 |
+| Four fields present | 770 | 714 | 719 | 682 | 741 |
+| At least one absent | 230 | 163 | 160 | 195 | 11 |
+
+gpu-postal reached **87.7% overall** and **92.7% on four-field inputs**.
+Its overall result matched Senzing on this sample; Senzing performed better on
+partial inputs. Compared with the previous int8 release, int5 reduced the model
+and runtime payload by 44%, with five fewer holdout matches and two fewer
+GeoSearch matches. On GeoSearch, eight inputs improved and ten regressed.
+
+All parsers received the same inputs and field mapping. We excluded three exact
+normalized-text training overlaps before sampling. Near-duplicate, entity and
+competitor-training overlap remain unknown. These results describe this
+synthetic-noise diagnostic rather than natural traffic or worldwide performance.
+
+### Country diagnostics and workflow examples
+
+Previously inspected public Senzing diagnostics, using float32 and the same token
+metric, yielded US 2,130/2,233; UK 232/255; Australia 33/76; New Zealand 38/51;
+South Africa 39/53. These development diagnostics show stronger US/UK results
+and a generalization gap for Australia, New Zealand and South Africa. Canada and
+Ireland have no external results here; Canada's same-source test has 115 rows.
+
+An AI-reviewed, US-dominated natural-address diagnostic matched 48/53 inputs.
+A separate workflow check matched **13/14 inputs**: seven public institution
+addresses plus lowercase, comma-free variants, with AI annotations prepared before
+inference. Two of 52 field values needed correction. The failing UK variant placed
+“south” in the street instead of “South Kensington”.
+
+These small checks illustrate behavior; they use AI annotations, have unknown
+training-entity overlap and do not measure human time savings. Partial addresses
+remain a priority for improvement. Other countries and multilingual inputs fall
+outside the evaluated scope.
+
+## Browser performance
+
+Measurements use an M1 Pro with 16 GB memory, Chromium 152 and an Apple Metal-3
+hardware adapter.
+
+| Measurement | Result |
+| --- | ---: |
+| Model weights | 69,016 bytes (Brotli) |
+| Release JavaScript + weights | 74,350 bytes (Brotli) |
+| Parser initialization, localhost | 14.1 ms |
+| First parse | 4.5 ms |
+| Warm parse median / p95 | 2.9 / 4.5 ms |
+
+Sizes sum each release file compressed at Brotli quality 11, excluding HTML,
+documentation and HTTP headers. Serve with `Content-Encoding: br` for these
+transfer sizes.
+
+Warm timings cover 1,000 sequential GeoSearch calls. Initialization measurements
+retain browser/driver shader caches and use localhost delivery. Hardware,
+browser and loading conditions affect latency; this evaluation covers Chromium
+on the M1 Pro, without a CPU comparison.
+
+Int5 browser predictions matched Python components and UTF-16 offsets on all
+12,115 holdout and 1,000 GeoSearch inputs. The browser workflow check matched
+13/14 inputs. During 1,014 parses after asset loading,
+the qualification page recorded zero resource requests under a same-origin CSP.
+The example performs inference on the device and includes no telemetry.
+
+## Artifacts and reproduction
+
+Model SHA-256:
+`e97cfb86c5ec703ad70ba684f2f373a44dc9c9e1018e517ab6799e74aa5ce84a`.
+
 Checkpoint SHA-256:
 `436dc0a84fca3816a851f28a5eb56d716153acc993748ddc16768e7c6502e7ec`.
 
-## Intended use and contract
+The release tag preserves the
+[training recipe](https://github.com/f0rr0/gpu-postal/blob/v0.1.0-experimental.1/docs/english-seven-release.md)
+and [GeoSearch preparation and comparator reproduction](https://github.com/f0rr0/gpu-postal/blob/v0.1.0-experimental.1/docs/evidence/geosearch-sample-20260916.py).
+Use `packages/core/test/release.html` for browser qualification.
+Training and external evaluation require the corresponding local datasets;
+the package includes the model, not the raw corpus.
 
-Reviewable field suggestions from one address in a browser. Preserve the original
-input and let people correct predictions. This is not a validator, geocoder,
-address-presence detector, language detector, or missing-field completer.
+## License
 
-Seven fields: street_address (premises/road/unit/floor/PO-box information), locality,
-city, district, state, postcode, country. District is not merged into city. Original
-spans use JavaScript UTF-16 offsets. Predictions are `unassessed`, not confidence-rated.
+Original code and documentation use [MIT](LICENSE). Preserve
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) with the weights, including G-NAF
+attribution and its requirement for secondary-source deliverability verification
+when generating mailing addresses.
 
-English-form addresses from US, UK, AU, NZ, CA, IE and ZA are the training scope.
-This does not establish equal performance in those countries. India and worldwide
-Latin-script address support are not claimed. Partial inputs can fail badly.
-
-## Training and architecture
-
-154,446 parameters: ordered byte convolution, two bidirectional affine-scan layers,
-seven-field BIO emissions and CRF decoding. GPA3 int8 storage is expanded to float32
-for WebGPU execution. One parser keeps its resources resident and serializes calls.
-
-Trained from scratch on 3,790,046 rows, 12 full shuffled epochs, seed 2026, batch 128,
-MPS on Apple M1 Pro 16 GB, case augmentation and inverse-country-frequency loss
-weights. Runtime 13,772.94 seconds. Best validation country-macro exactness 99.0044%.
-The 12-epoch budget ended while validation was improving; not proven convergence.
-
-Training counts: US 77,917; GB 74,191; AU 1,297,093; NZ 1,415,622; CA 2,225;
-IE 50,883; ZA 872,115. Data is source-concentrated and partly generated, with
-inherited annotation errors. Group splitting reduces street overlap but does not
-guarantee entity-level independence. Source attribution and transformations:
-`THIRD_PARTY_NOTICES.md`. No raw corpus is included.
-
-## Accuracy
-
-Same-source street-group holdout, exact ordered spans: int8 **12,019/12,115
-(99.2076%)**, float32 12,022/12,115. This is not real-world accuracy; Canada's test
-slice has only 115 rows.
-
-Frozen external US GeoSearch sample (1,000), actual browser int8:
-
-| Group | Rows | Browser int8 | Float32 | Senzing v1.2 | Deepparse BPEmb + attention |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| All | 1,000 | 879 | 879 | 877 | 752 |
-| Four fields present | 770 | 720 | 719 | 682 | 741 |
-| At least one absent | 230 | 159 | 160 | 195 | 11 |
-
-Metric: exact per-field token multisets, case/commas/whitespace ignored; not ordered
-span accuracy. Same inputs and field mapping for all parsers. Three normalized-text
-training overlaps were excluded before sampling; near/entity and competitor overlap
-remain unknown. Upstream inputs use synthetic noise, not natural production traffic.
-The two-case overall difference versus Senzing does not establish superiority.
-Quantization changed two field outputs, with one gain and one loss.
-
-Previously inspected public Senzing diagnostics (float32, same token metric):
-US 2,130/2,233; GB 232/255; AU 33/76; NZ 38/51; ZA 39/53. CA/IE absent.
-These are not blind benchmarks; the weak AU/NZ/ZA results must not be hidden by
-the same-source score. Natural AI-reviewed in-scope diagnostics: 48/53, tiny and
-US-dominated, not independent human gold.
-
-Fresh workflow spot check: seven public institution addresses and seven lowercase,
-comma-free variants, annotated by AI before inference, **13/14** exact field matches.
-Two field values needed correction out of 52 fields to enter; all outputs still
-require review. The failing UK variant assigns “south” to the street rather than
-“South Kensington”. This convenience sample is not a usability study, country
-benchmark, or measured time-saving result. Training entity overlap is unknown.
-
-## Browser size, performance and privacy
-
-On M1 Pro 16 GB, Chromium 152, Apple Metal-3 non-fallback adapter:
-
-- Weights: 154,562 bytes. Four runtime JS modules: 20,137 bytes. Total uncompressed
-  body payload: **174,699 bytes**, excluding HTML, documentation and HTTP overhead.
-- First parser instance initialization: 17.5 ms; first parse: 5.4 ms on localhost.
-  Browser/driver shader caches were not purged. **Not a cold internet-load claim.**
-- 1,000 subsequent sequential GeoSearch calls: median 2.2 ms, p95 3.2 ms.
-  No batch-throughput or CPU-speedup claim.
-- Existing float/int8 parity: 29/29 fixtures matched components, UTF-16 offsets
-  and reconstructed BIO paths; fixture parity is not exhaustive accuracy.
-- Qualification page recorded zero resource requests during 1,014 parses after
-  assets loaded, under a same-origin CSP. The source example has no telemetry.
-  No public hosted product demo has been deployed or privacy-audited.
-
-Safari, Firefox, mobile GPUs and unsupported-browser fallback are not qualified.
-
-## Reproduce and license
-
-See the repository's `docs/english-seven-release.md` for training and
-`packages/core/test/release.html` for browser qualification. GeoSearch preparation
-and comparator reproduction are in `docs/evidence/geosearch-sample-20260916.py`.
-Selected local data must be reconstructed separately; this is not a bundled corpus
-or a claim that a clean clone reproduces all training inputs with one command.
-
-Our code/documentation is MIT. Preserve `THIRD_PARTY_NOTICES.md` with the weights:
-this is **not an unrestricted MIT-only model bundle**. G-NAF mailing conditions
-require a secondary source for mail-deliverability verification; this model does
-not provide it. Source-level provenance limitations remain disclosed.
-
-Please report only public or redacted examples at
-https://github.com/f0rr0/gpu-postal/issues. Do not submit private addresses.
+Report parsing issues with public or redacted examples at
+[GitHub Issues](https://github.com/f0rr0/gpu-postal/issues).

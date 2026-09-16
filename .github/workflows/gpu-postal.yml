@@ -19,8 +19,8 @@ jobs:
           cache-dependency-glob: uv.lock
       - run: uv sync --locked
       - run: npm ci
-      - run: uv run ruff check packages/training/src tests
-      - run: uv run ruff format --check packages/training/src tests
-      - run: uv run ty check packages/training/src tests
+      - run: uv run ruff check packages/training
+      - run: uv run ruff format --check packages/training
+      - run: uv run ty check packages/training
       - run: npm test
       - run: uv run pytest

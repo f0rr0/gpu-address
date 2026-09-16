@@ -8,10 +8,82 @@ import { readModel, WEIGHT_COUNT } from '../dist/model.js';
 
 const TENSORS = 24;
 
+test('GPU failures release initialization resources and reject active and queued parses', async t => {
+  const globals = ['navigator', 'GPUBufferUsage', 'GPUMapMode'];
+  const descriptors = globals.map(name => Object.getOwnPropertyDescriptor(globalThis, name));
+  t.after(() => globals.forEach((name, i) => {
+    if (descriptors[i]) Object.defineProperty(globalThis, name, descriptors[i]);
+    else delete globalThis[name];
+  }));
+  Object.defineProperty(globalThis, 'GPUBufferUsage', { configurable: true, value: {
+    STORAGE: 1, COPY_DST: 2, UNIFORM: 4, COPY_SRC: 8, MAP_READ: 16,
+  } });
+  Object.defineProperty(globalThis, 'GPUMapMode', { configurable: true, value: { READ: 1 } });
+
+  for (const failure of ['shader', 'pipeline', 'buffer', 'bindings', 'loss']) {
+    let lose, mapStarted, rejectMap;
+    let destroyed = 0, unmapped = 0, submissions = 0;
+    const mapping = new Promise(resolve => { mapStarted = resolve; });
+    const device = {
+      lost: new Promise(resolve => { lose = resolve; }),
+      destroy() { destroyed++; },
+      createShaderModule() {
+        return { async getCompilationInfo() {
+          return { messages: failure === 'shader' ? [{ type: 'error', message: 'shader failure' }] : [] };
+        } };
+      },
+      async createComputePipelineAsync() {
+        if (failure === 'pipeline') throw new Error('pipeline failure');
+        return { getBindGroupLayout() {} };
+      },
+      createBuffer() {
+        if (failure === 'buffer') throw new Error('buffer failure');
+        return {
+          destroy() {},
+          mapAsync() {
+            mapStarted();
+            return new Promise((_, reject) => { rejectMap = reject; });
+          },
+          unmap() { unmapped++; },
+        };
+      },
+      createBindGroup() { if (failure === 'bindings') throw new Error('bindings failure'); },
+      queue: { writeBuffer() {}, submit() { submissions++; } },
+      createCommandEncoder() {
+        return {
+          beginComputePass() { return { setPipeline() {}, setBindGroup() {}, dispatchWorkgroups() {}, end() {} }; },
+          copyBufferToBuffer() {}, finish() {},
+        };
+      },
+    };
+    Object.defineProperty(globalThis, 'navigator', { configurable: true, value: {
+      gpu: { async requestAdapter() { return { async requestDevice() { return device; } }; } },
+    } });
+    if (failure !== 'loss') {
+      await assert.rejects(createParser(modelBytes(0)), new RegExp(`${failure} failure`));
+      assert.equal(destroyed, 1);
+      continue;
+    }
+    const parser = await createParser(modelBytes(0));
+    const active = assert.rejects(parser.parse('123 Main St'), /WebGPU device lost.*test loss/);
+    const queued = assert.rejects(parser.parse('London'), /WebGPU device lost.*test loss/);
+    await mapping;
+    lose({ reason: 'unknown', message: 'test loss' });
+    rejectMap(new Error('mapping failed'));
+    await Promise.all([active, queued]);
+    await assert.rejects(parser.parse(''), /WebGPU device lost/);
+    assert.equal(submissions, 1);
+    assert.equal(unmapped, 1);
+    await parser.dispose();
+    await parser.dispose();
+    assert.equal(destroyed, 1);
+  }
+});
+
 test('release weights are frozen and unavailable WebGPU fails before downloading', async () => {
   const bytes = readFileSync(new URL('../model.bin', import.meta.url));
   assert.equal(createHash('sha256').update(bytes).digest('hex'),
-    '4ca878842b0eef37037f9ca5fa8f77096b54bb5ff34c42d4c3927d99b7a65624');
+    'e97cfb86c5ec703ad70ba684f2f373a44dc9c9e1018e517ab6799e74aa5ce84a');
   assert.equal(readModel(bytes).weights.length, 154446);
   await assert.rejects(createParser(), /WebGPU is unavailable/);
 });
