@@ -1,5 +1,8 @@
 # Additional address data: acquisition and quality audit
 
+> Historical evidence from the pre-WebGPU GRU baseline. Its model/export details are
+> superseded by the [active architecture plan](address-next-research-plan.md).
+
 Executed September 14, 2026. We acquired and checked additional sources, then built `experiments/address-parser/data/multisource/`. This is an expanded experimental training corpus, **not a newly certified gold dataset**. Source availability is described in [the shortlist](additional-labeled-address-sources.md).
 
 ## What we acquired and used

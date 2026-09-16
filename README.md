@@ -2,6 +2,12 @@
 
 Small postal-address models trained in Python and run in the browser with TypeScript and ONNX Runtime Web.
 
+**Status: research closed; publication pending.** We are preserving this as an
+experimental result, not a production-ready address parser. No further training or
+data expansion is planned. See the [closeout and publication plan](docs/closeout.md)
+and [project learnings](docs/learnings.md).
+The implementation notes below describe the earlier committed baseline; the local WebGPU work and nominated release artifact are not published by this documentation commit.
+
 | Location | Purpose |
 | --- | --- |
 | `packages/training/` | Data preparation, PyTorch training, evaluation and export |

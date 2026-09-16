@@ -1,5 +1,8 @@
 # GPU Lexer and GPU Time: implementation audit for the address-parser tooling decision
 
+> Research snapshot gathered before the WebGPU pivot. The current decision and next
+> steps are in the [active architecture plan](address-next-research-plan.md).
+
 Inspected 2026-09-14. Repositories cloned read-only into scratch; findings below refer to exact commits, not floating README summaries. This is source inspection and selected unit-test execution, not independent retraining or browser benchmarking.
 
 - GPU Lexer: `vercel-labs/gpu-lexer`, commit `1e514fd681e31d6b19296f985fb01d8fdc0ae74f`.
