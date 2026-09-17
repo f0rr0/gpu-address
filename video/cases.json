@@ -1,0 +1,28 @@
+{
+  "verified": "2026-09-18, live Chrome WebGPU at https://gpu-postal.vercel.app/",
+  "modelSha256": "06a212f708a52c32e099c15e384e3bd149885c01d06c4b00343cc3b7ad894b60",
+  "cases": [
+    {
+      "name": "Vercel HQ",
+      "source": "https://vercel.com/go/builder-day",
+      "text": "201 Mission Street Floor 3 San Francisco CA 94105",
+      "components": [
+        {"label": "street_address", "raw": "201 Mission Street Floor 3"},
+        {"label": "city", "raw": "San Francisco"},
+        {"label": "state", "raw": "CA"},
+        {"label": "postcode", "raw": "94105"}
+      ]
+    },
+    {
+      "name": "OpenAI",
+      "source": "https://openai.com/policies/developer-apps-terms/",
+      "text": "1455 3rd Street San Francisco CA 94158",
+      "components": [
+        {"label": "street_address", "raw": "1455 3rd Street"},
+        {"label": "city", "raw": "San Francisco"},
+        {"label": "state", "raw": "CA"},
+        {"label": "postcode", "raw": "94158"}
+      ]
+    }
+  ]
+}

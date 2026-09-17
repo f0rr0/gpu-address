@@ -14,15 +14,15 @@ const samples = ([
   // https://openai.com/policies/developer-apps-terms/
   ["OpenAI", ["1455 3rd Street", "San Francisco", "CA", "94158"]],
   // https://assets.anthropic.com/m/4e20a4ab6512e217/original/anthropic-response-to-stp-rfi-march-2025-final-submission-v3.pdf
-  ["Anthropic", ["548 Market St., PMB 90375", "San Francisco", "CA", "94104-5401"]],
+  ["Anthropic", ["548 Market St. PMB 90375", "San Francisco", "CA", "94104-5401"]],
   // https://cloud.google.com/events/google-ai-summit
   ["Google", ["1600 Amphitheatre Pkwy", "Mountain View", "CA", "94043"]],
   // https://allenai.org/contact
-  ["Ai2", ["3800 Latona Ave NE, Suite 300", "Seattle", "WA", "98105"]],
+  ["Ai2", ["3800 Latona Ave NE Suite 300", "Seattle", "WA", "98105"]],
 ] as const).map(([label, parts]) => ({
   label,
   parts,
-  address: `${parts[0]}, ${parts[1]}, ${parts[2]} ${parts[3]}`,
+  address: parts.join(" "),
 }));
 const sampleFields = ["street_address", "city", "state", "postcode"] as const;
 const highlightClass =
@@ -272,7 +272,7 @@ export function ParserDemo() {
             <span className="text-sm leading-6">
               {exampleParts.map((part, index) => (
                 <Fragment key={sampleFields[index]}>
-                  {index > 0 && (index === 3 ? " " : ", ")}
+                  {index > 0 && " "}
                   <mark
                     data-field={sampleFields[index]}
                     className={cn(
