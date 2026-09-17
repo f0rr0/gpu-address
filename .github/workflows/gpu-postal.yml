@@ -23,4 +23,5 @@ jobs:
       - run: uv run ruff format --check packages/training
       - run: uv run ty check packages/training
       - run: npm test
+      - run: npm run build:website
       - run: uv run pytest

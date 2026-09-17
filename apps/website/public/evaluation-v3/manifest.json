@@ -1,0 +1,387 @@
+{
+  "protocol_version": 3,
+  "frozen_at": "2026-09-17T03:58:57.704012+00:00",
+  "seed": "broader-v3-20260917",
+  "rows": 1042,
+  "entities": 1042,
+  "cohorts": [
+    "complete"
+  ],
+  "selected": {
+    "AK": 8,
+    "AL": 25,
+    "AR": 25,
+    "AZ": 25,
+    "CA": 25,
+    "DE": 25,
+    "England": 50,
+    "GA": 15,
+    "IA": 25,
+    "ID": 3,
+    "IL": 25,
+    "IN": 25,
+    "KS": 25,
+    "KY": 25,
+    "LA": 11,
+    "MD": 25,
+    "ME": 25,
+    "MN": 25,
+    "MO": 25,
+    "MT": 25,
+    "NC": 25,
+    "ND": 23,
+    "NE": 9,
+    "NJ": 25,
+    "NM": 25,
+    "NY": 25,
+    "Northern Ireland": 50,
+    "OH": 25,
+    "OK": 25,
+    "OR": 25,
+    "PA": 25,
+    "SC": 4,
+    "SD": 2,
+    "Scotland": 50,
+    "TN": 25,
+    "TX": 25,
+    "UT": 25,
+    "VA": 25,
+    "VT": 14,
+    "WA": 25,
+    "WI": 25,
+    "WV": 25,
+    "WY": 3,
+    "Wales": 50
+  },
+  "eligible": {
+    "NY": 387,
+    "OR": 109,
+    "MD": 143,
+    "AZ": 190,
+    "MO": 92,
+    "AL": 69,
+    "WA": 134,
+    "TX": 483,
+    "OH": 296,
+    "KS": 77,
+    "IN": 200,
+    "IL": 271,
+    "IA": 76,
+    "AR": 100,
+    "TN": 208,
+    "OK": 62,
+    "ND": 23,
+    "MT": 51,
+    "VA": 238,
+    "NM": 41,
+    "ME": 48,
+    "NJ": 212,
+    "GA": 15,
+    "KY": 108,
+    "MN": 65,
+    "LA": 11,
+    "NC": 350,
+    "WV": 56,
+    "UT": 78,
+    "PA": 41,
+    "DE": 36,
+    "CA": 83,
+    "AK": 8,
+    "WI": 79,
+    "ID": 3,
+    "SD": 2,
+    "VT": 14,
+    "NE": 9,
+    "WY": 3,
+    "SC": 4,
+    "England": 99,
+    "Scotland": 97,
+    "Wales": 74,
+    "Northern Ireland": 91
+  },
+  "exclusions": {
+    "NAD_missing_or_placeholder_core_field": 1235,
+    "NAD_invalid_ZIP": 23,
+    "duplicate_address": 4,
+    "training_or_prior_evaluation_match": 2,
+    "CH_default_registration_address": 22,
+    "CH_duplicate_address_line_or_town": 3,
+    "CH_postcode_in_address_line": 1,
+    "CH_county_in_town_field": 7
+  },
+  "inputs_sha256": "e3b3e279d781dd95b9171a9b2569e0bb91a8b08919531d6ea00c15a3fb7c8080",
+  "preparation_sha256": "3152f65ef33550ebe4c8a4053c64850e915e78a457d9d21d74b57a82ce8c490c",
+  "model_sha256": "e97cfb86c5ec703ad70ba684f2f373a44dc9c9e1018e517ab6799e74aa5ce84a",
+  "checkpoint_sha256": "436dc0a84fca3816a851f28a5eb56d716153acc993748ddc16768e7c6502e7ec",
+  "models": {
+    "gpu": "gpu-postal int5 experimental.2 (Python reconstruction of release weights)",
+    "libpostal": "libpostal default v1.0.0",
+    "senzing": "libpostal Senzing v1.2",
+    "deepparse": "Deepparse 0.10.0 BPEmb + attention"
+  },
+  "field_projection": {
+    "locality": "street_address",
+    "district": "state"
+  },
+  "metric": "Exact-field micro F1 and whole-address exact match. Source address block, town, region when present, postcode. Locality merged into address block; district merged into region for all parsers. NFKC/casefold token multisets ignore case/commas/whitespace, retain other punctuation and multiplicity. Extra fields penalized.",
+  "labels": "Source-provided fields, not human-annotated token labels. NAD postal city only; no municipality substitution. UK AddressLine1/2 and POBox form one address block; CareOf, country and optional county omitted. All extra address lines retained. Source errors may remain; no claim of address validity.",
+  "selection": "Before any inference: 6,000 seeded random NAD object IDs across 1..102476025; at most 25 eligible unique addresses per available state. Companies House full monthly snapshot: lowest 100 SHA256(seed+company ID) candidates per non-border postcode nation, then 50 eligible unique addresses per nation. Exclude ambiguous cross-border SY/CH/HR/TD postcode areas; equal UK nation weights are not population weights.",
+  "overlap": "Exclude normalized street+town OR street+postcode matches against released-model training and all prior published evaluations. Near matches and competitor training overlap unknown; NAD may share upstream sources with OpenAddresses. The benchmark is author-run, not independently verified.",
+  "limitations": "US NAD coverage is uneven; UK registered-office addresses only, not representative residential coverage. Structured fields rendered with commas, not natural user traffic. Four-field projection does not measure fine-grained locality/district extraction. FSA withheld because its untyped address lines need independent annotation. No synthetic deletion tests in primary results.",
+  "sources": {
+    "companies.zip": {
+      "sha256": "0cad523a096c6c9c79004f1243746985e296bda48b24e32b69cbde5ff61348e5"
+    },
+    "companies-candidates.json": {
+      "sha256": "b133d656c813503ea660ac8b91a460ec9b5be6c80a977aa34f857e2fefc9532a"
+    },
+    "nad-max.json": {
+      "sha256": "83c642540321a5c37c31c8e297f1f9077e7deb791bc9074fdbaf9da8b3952ba6"
+    },
+    "nad-00.json": {
+      "sha256": "6e6a99a456e2adc4fefd9ed6b634cf75cd35ca5c72ee77c01accfe022dbb738a"
+    },
+    "nad-01.json": {
+      "sha256": "5eb1886bcca6721dc6b13537c50f69e1ab999c39062c68367df5c316f278d550"
+    },
+    "nad-02.json": {
+      "sha256": "7d6ee17a619bfdaee347f5012afa9140aed428b793b5a540ff8f155a61d99f52"
+    },
+    "nad-03.json": {
+      "sha256": "b4ce4173441573a258512d809928bfb869f4eaf200877856eac628131e205a58"
+    },
+    "nad-04.json": {
+      "sha256": "3750c4d60fb8a431ada47ada3fcf5294f696c822c57cd7aa73211cf47fb4c8f3"
+    },
+    "nad-05.json": {
+      "sha256": "e2ed0ffe7b9b1a470b24305dfb29eab9ca788ebc0bb7b30c339cd7abd5a7ba9e"
+    },
+    "nad-06.json": {
+      "sha256": "4e35a7a00840c7abfbf88a250c87759e26023f9789a3a08a82d0ebf61ee86e64"
+    },
+    "nad-07.json": {
+      "sha256": "cf8dc5d70e460226520991b9c92e0a4985a826cef981ab6de42227cd90873415"
+    },
+    "nad-08.json": {
+      "sha256": "9531df79a651ebd6ba27fa122eb252bbe4aac5385c10f45feca342e031c057b8"
+    },
+    "nad-09.json": {
+      "sha256": "a4b8d537e047dad2da293a7a51734105ff064cb348589ab3d836073f527258ed"
+    },
+    "nad-10.json": {
+      "sha256": "600bd784c891493ee9b2e22269f43a0768337411ebc507f76a53c8e4c89be327"
+    },
+    "nad-11.json": {
+      "sha256": "5c76867377ba3de0a96b3e3a37ed7fec82376fa1a99d21bff715de425f892819"
+    },
+    "nad-12.json": {
+      "sha256": "371144d1c21bc01e84a9b1985f0c8cb06edde5bf4e81f175b45f632d5d1a717c"
+    },
+    "nad-13.json": {
+      "sha256": "6be18d5a0bc6aef6b47d8c76b0e14558f32c9538b6fa15e4aa3e1530cffaae64"
+    },
+    "nad-14.json": {
+      "sha256": "ce1bc2248549cc3e1f5f15ce10e2194a787d3bf63bcccbf9197e3215b8bc3d88"
+    },
+    "nad-15.json": {
+      "sha256": "dd8b50ca247b157e64e5a28d4aea6389d61b301c92efc353c4161c30f6f68d0f"
+    },
+    "nad-16.json": {
+      "sha256": "2f844f049cd8d4070f588ecb767a5439f7a2fe79d1f1af0c376c36dbaa1971b1"
+    },
+    "nad-17.json": {
+      "sha256": "20cc2514aab5c250e2631b382aa5318099c0125a6773031967990e177b65f8fe"
+    },
+    "nad-18.json": {
+      "sha256": "6889f31ba60a3e609fb015613a3abcd95355e4ae761a93b2fd062c3a9c273bc3"
+    },
+    "nad-19.json": {
+      "sha256": "34c78c03c29cce8575fae81a1ddc81ba34e43b0ee2e0fb466f0f8ca6609c7cdf"
+    },
+    "nad-20.json": {
+      "sha256": "86fae9c3fb38cd98ada66cdab5bd854d329f989c54e88adb077301cfd8e73177"
+    },
+    "nad-21.json": {
+      "sha256": "abc8826c23c90c3b71d5300059c7ff699834dd894f25d4324be86cb5aabe39fe"
+    },
+    "nad-22.json": {
+      "sha256": "0d8bef596d09ab3e6171a84b32413c6bfcfd24bc56ce49a680f90389acf9b4ab"
+    },
+    "nad-23.json": {
+      "sha256": "4c98698e1b673a6b40442e3126d5080aa6163f097293fdf18b9a8dcb4f336cbf"
+    },
+    "nad-24.json": {
+      "sha256": "256af24351e642aaf29f9a7612646eae6298d6a5505e5a42c69dd809658925d2"
+    },
+    "nad-25.json": {
+      "sha256": "5e1177b0558b97e15fcaa6d211c6a8faeb8b75109a7b532ce1d748a9cfcb8f98"
+    },
+    "nad-26.json": {
+      "sha256": "148d6adf9bf5c400a4acf50d1347c8b412b1b16ce37a22d2ae5e22addefb003d"
+    },
+    "nad-27.json": {
+      "sha256": "91d8b1389b4a2238483c660146936d8cb6d377a7ad90823119341f6bb2a6509d"
+    },
+    "nad-28.json": {
+      "sha256": "c655e85f5454c0516da62d0014e0b424e7ed8512d40bb06ceff7e4c78cee6e6d"
+    },
+    "nad-29.json": {
+      "sha256": "3271b965bf297085470c0e9a11773dba32d38dade8f2bbb3b0f53638bff19f76"
+    },
+    "nad-30.json": {
+      "sha256": "51511b9bf8fcd9bf21bce809fbd47747bc251080d391328546ea8d4b9204aa61"
+    },
+    "nad-31.json": {
+      "sha256": "ac7adcf6c659731d550c175aff2ce2da303dc8e594fc7994c52fdf88ee3ada5e"
+    },
+    "nad-32.json": {
+      "sha256": "c743cf2d4d6f9ef8325a9c73a7b80e6e13084457d877ebe49dac38fc6a02cf88"
+    },
+    "nad-33.json": {
+      "sha256": "bcbbbe05421a3b9c63550fea69d0bfcc99ae1937c53707d93294b463dd1950e5"
+    },
+    "nad-34.json": {
+      "sha256": "5561a939ac828d5f126175d9a3da7a089d1c580690f9ec569f3323ad207d55c5"
+    },
+    "nad-35.json": {
+      "sha256": "b38bd607afa198a0aa7e9219e14fd73fb6ea1017ff1a407b672de914e8827eec"
+    },
+    "nad-36.json": {
+      "sha256": "87bd3159d6dc26f22aa12f2fffcf74e059d4530446d9e1582275a216bc3501ed"
+    },
+    "nad-37.json": {
+      "sha256": "ba789678ba5343508aa0e1225772bc76dbe75a301464680d3235ed5288da5f96"
+    },
+    "nad-38.json": {
+      "sha256": "a768240a7adafe3e3e314307e28b0cce39a2bb0ca482a1c781c42b732b7ee824"
+    },
+    "nad-39.json": {
+      "sha256": "78377017c51882b09acd2dcfabb2e3a38f51b415b56e9b4e9fe993565b071f3c"
+    },
+    "nad-40.json": {
+      "sha256": "f045e90458ee2a40628dae6503c56375526b7e8fe2df26ec3703dc77bde4822d"
+    },
+    "nad-41.json": {
+      "sha256": "cebd6982360ede13342847d8fc1d5b84d8ae7717ccc72bb7a500a8771859c579"
+    },
+    "nad-42.json": {
+      "sha256": "d0a13d2c9bc1b5d2bdd4669deceed35fd83fe57c9448e18fe5d9e38181d60910"
+    },
+    "nad-43.json": {
+      "sha256": "a77ac6a10562e0fefb7b805627f2048895a095f1baa052e87e0066e1b3bf6025"
+    },
+    "nad-44.json": {
+      "sha256": "ba35395d4d64918689b5521307997b764ba75b110c09516bd8a31889906d7a91"
+    },
+    "nad-45.json": {
+      "sha256": "b18774341f1236346736059d5223954c1df36fcc2893c28d8aa0522d65d983fa"
+    },
+    "nad-46.json": {
+      "sha256": "17e92bc7e5e87f410412111af805f6582e262cc09409e8705c5a95b31500f2d0"
+    },
+    "nad-47.json": {
+      "sha256": "83395807bd687d0f6e62875821201727b1cdf7ef5453dd7e382d24cfb6ed06fb"
+    },
+    "nad-48.json": {
+      "sha256": "f9a8fbe794ddf2fe87dad8dff53d898e98df53fc486aac75f148b82836e43f5b"
+    },
+    "nad-49.json": {
+      "sha256": "d7cfa3e7c76ee97214dbbbb9452192d6c0aee1bbfe58c5b7897430c65eaadeb0"
+    },
+    "nad-50.json": {
+      "sha256": "75e73909e90cad9d6df3e8bd13e7279c0a1fd9f05fb1d4cbb9eb207d20acd2d5"
+    },
+    "nad-51.json": {
+      "sha256": "bb6ebf32ebd01e23dcddc6cd8de57207d45f217c9b040ad5037d5c6d29d7f9f5"
+    },
+    "nad-52.json": {
+      "sha256": "91c7012e00538d3aab535e46b611c2f91c65ee648854089045bdcca9b7f1b830"
+    },
+    "nad-53.json": {
+      "sha256": "8c5e5b6cf16b85153b05e472cc0753296474f8ff9d72fa65a3b036b6a7536f64"
+    },
+    "nad-54.json": {
+      "sha256": "f6a6b33565b45e211217fca03b04ba734c34a8ffcb859864bffe5001bfb24079"
+    },
+    "nad-55.json": {
+      "sha256": "76f2046e54a7f6d4dc51681f96702cb0b1ff47c89c2b5c16fca3acae029602c4"
+    },
+    "nad-56.json": {
+      "sha256": "bb717f8433dd7b5bb581f08a97edc9a52e0143816e756d80440b10bf49c1451a"
+    },
+    "nad-57.json": {
+      "sha256": "cb509aea8aa80506569ad44020d56beccf721fdbcbc4dd3c0fb0cd9c76128d87"
+    },
+    "nad-58.json": {
+      "sha256": "6cc54964bf1fa26e53c41288a15fc037004c4ba65cb9c7e87693d911c8773482"
+    },
+    "nad-59.json": {
+      "sha256": "af74b334b9463451fd3a59ab9bb609deb720650f9010731eb0c1afc4a4f25d2d"
+    },
+    "nad-60.json": {
+      "sha256": "ff68fad6aec74ea66314a34880341891c5cc9d6f413dc76f4dd252196e5de61b"
+    },
+    "nad-61.json": {
+      "sha256": "516f548d6baf42c0292654aaa6d8d91283e3b124dc455a59b12f02b445403771"
+    },
+    "nad-62.json": {
+      "sha256": "ef27cdde32a99ca42d55b5331e0f36bb74875a9ff6b16dd87ebbed89af31138b"
+    },
+    "nad-63.json": {
+      "sha256": "4546ab164b47212d35083a71a6aa6c4e0ac39a263707f9dcf4f7eed6d97c8e04"
+    },
+    "nad-64.json": {
+      "sha256": "cd398ca7152652a33f9ddf4f0ebd17cc9164e606ed85a2116c055c8a908be1f5"
+    },
+    "nad-65.json": {
+      "sha256": "b4517493c728ef718f47cad54371cf338666887422d5602edddb2f59e5f3fff3"
+    },
+    "nad-66.json": {
+      "sha256": "d754428a7ad84f3bde658d13afa6be09a185fee3c991e602afae7c9e899255ff"
+    },
+    "nad-67.json": {
+      "sha256": "392845a0686d3281ead7c15896dce179c68474c13231c3cf0bb951b661c4cc51"
+    },
+    "nad-68.json": {
+      "sha256": "af80899b7968d5efc371306936d0f0003df07a8cbc73790ac8bb4247420049af"
+    },
+    "nad-69.json": {
+      "sha256": "f5353b77811d8014ec858fe1485f27b0d2d069ff74e41419ccb3ceffd48727f5"
+    },
+    "nad-70.json": {
+      "sha256": "6abc6a317b704939e8a93d0b21aca1c5ac3eea8caf024c9516723dda0a40c5d7"
+    },
+    "nad-71.json": {
+      "sha256": "c658021883bf323179b197d6dbcb9fa0385217a81cd85a78144b7b2cc993a76f"
+    },
+    "nad-72.json": {
+      "sha256": "44a22164d1aabcf5e91e5ed026e51f7e01249e5eb94188ba8c05e34e6ff95bc2"
+    },
+    "nad-73.json": {
+      "sha256": "318bc24d50c1a5ba309419202f0af374a0989ac212b2faa24c1e14d4695bc6d4"
+    },
+    "nad-74.json": {
+      "sha256": "028920cb9f34095bf1e6c91446337dc4bd2bd5c229137b17e885b5bcfa2f1658"
+    },
+    "nad-75.json": {
+      "sha256": "176584166f9a8f1d7592c1d8058b690e81cd2d93fe6bb935bdd3232bd3e94640"
+    },
+    "nad-76.json": {
+      "sha256": "462b5fedf92fe2ec4409bca4e6ca181ff568bce9ffaefcef1e28125d9588b4f6"
+    },
+    "nad-77.json": {
+      "sha256": "658dabb197e6069272b0e9cb2d0412a8268000a7ecf896891e02e44264db8639"
+    },
+    "nad-78.json": {
+      "sha256": "7361f132aa4c3d32e33f28250e250259684cd5ef485340389c39fa915d4081b0"
+    },
+    "nad-79.json": {
+      "sha256": "3bf5c9fac2b7aad389266c4c7aae2f4c9c681febdf449bec7b44e783db1d0d8a"
+    }
+  },
+  "source_urls": {
+    "companies.zip": "https://download.companieshouse.gov.uk/BasicCompanyDataAsOneFile-2026-09-01.zip",
+    "nad": "https://services.arcgis.com/xOi1kZaI0eWDREZv/ArcGIS/rest/services/Address_Points_from_National_Address_Database_view/FeatureServer/0/query"
+  },
+  "intervals": "95% Wilson intervals for whole-address exact match; descriptive intervals for this selected sample, not national accuracy estimates."
+}

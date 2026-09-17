@@ -5,6 +5,11 @@ __pycache__/
 *.egg-info/
 node_modules/
 dist/
+.next/
+.vercel/
+*.tsbuildinfo
+apps/website/public/model.bin
+apps/website/public/model-int5.bin.br
 data/
 runs/
 *.tgz

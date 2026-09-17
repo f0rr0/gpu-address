@@ -68,3 +68,18 @@ script, not its input corpus. Competitor packages retain their respective terms.
 [GPU Time](https://github.com/arikchakma/gpu-time) inspired the small-model,
 local-browser approach. They are not runtime dependencies. Development tools
 such as TypeScript and PyTorch retain their own licenses.
+
+## Website components
+
+The website uses [shadcn/ui](https://github.com/shadcn-ui/ui) components (MIT,
+copyright shadcn) and [Dither Kit](https://tripwire.sh/dither-kit) chart and gradient components
+by ripgrim / Boring Software, installed from its published registry on September
+17, 2026. Dither Kit's CLI declares MIT, but its public source repository does not
+currently supply a license file. Those vendored chart files are upstream code,
+not covered by our original-code copyright claim; confirm their redistribution
+terms before publishing the website. These website dependencies are not part of
+the gpu-postal runtime or its advertised package size.
+
+The website uses [gpu-lexer](https://github.com/vercel-labs/gpu-lexer)
+(MIT, copyright Shu Ding) for code syntax highlighting. It is not included in
+the gpu-postal runtime.

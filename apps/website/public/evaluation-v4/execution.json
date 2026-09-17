@@ -1,0 +1,101 @@
+{
+  "verified_at": "2026-09-17T04:06:24.693240+00:00",
+  "models": {
+    "gpu": "gpu-postal int5 experimental.2 (Python reconstruction of release weights)",
+    "libpostal": "libpostal default v1.0.0",
+    "senzing": "libpostal Senzing v1.2",
+    "deepparse": "Deepparse 0.10.0 BPEmb + attention"
+  },
+  "verified_assets": {
+    "libpostal": [
+      {
+        "file": "address_dictionary.dat",
+        "sha256": "9fbf8779942bcc84841ac948ebd0c910b37edc7ff812125f09b6c39018747b1d"
+      },
+      {
+        "file": "address_parser_crf.dat",
+        "sha256": "e44b308e9e1942efe8ad8226929e29ca49e9ea2900ed36625c601c53509ba5c1"
+      },
+      {
+        "file": "address_parser_phrases.dat",
+        "sha256": "739643ea06d8c492ba57bd51ba1dc1243853e7f8c6130e3a7bd30150221119e6"
+      },
+      {
+        "file": "address_parser_postal_codes.dat",
+        "sha256": "7c5b20c541c16758cc73c41025f2327be525831dff272a6b4c3aeb901e481b1b"
+      },
+      {
+        "file": "language_classifier.dat",
+        "sha256": "f0800eb07610b7ecb771a01b037a4c9ea6eed01668c2e1b863a2202f3db9e13c"
+      },
+      {
+        "file": "numex.dat",
+        "sha256": "269630109fac796ab576b7fb29a36f3279c0c194e46a9abe91684653bf082a38"
+      },
+      {
+        "file": "transliteration.dat",
+        "sha256": "db75453e1d8a24302be0831304f9bb4792d41ea4e5a5e645c3839ee04763e64c"
+      },
+      {
+        "file": "address_parser_vocab.trie",
+        "sha256": "962a985f29530440035bd379826f38e35f0f0fc718926444658d89bbd70829b1"
+      }
+    ],
+    "senzing": [
+      {
+        "file": "address_dictionary.dat",
+        "sha256": "7baf20bd6f02708566bbd500eb172c308ccfebc2010cd733c9c42c1998232919"
+      },
+      {
+        "file": "address_parser_crf.dat",
+        "sha256": "6823895f4a8f2c3ec9e33befef02f12507a32572696101c92c684cbbc61c1848"
+      },
+      {
+        "file": "address_parser_phrases.dat",
+        "sha256": "f601c7a15689214782d9481817cd21c268432b53de72bd3ec2c9f0baf5faef3e"
+      },
+      {
+        "file": "address_parser_postal_codes.dat",
+        "sha256": "874234e9463e70ac98610dd84ef0d3d137e82a60e241a6f25bd2ed3596761ac6"
+      },
+      {
+        "file": "language_classifier.dat",
+        "sha256": "f0800eb07610b7ecb771a01b037a4c9ea6eed01668c2e1b863a2202f3db9e13c"
+      },
+      {
+        "file": "numex.dat",
+        "sha256": "269630109fac796ab576b7fb29a36f3279c0c194e46a9abe91684653bf082a38"
+      },
+      {
+        "file": "transliteration.dat",
+        "sha256": "db75453e1d8a24302be0831304f9bb4792d41ea4e5a5e645c3839ee04763e64c"
+      },
+      {
+        "file": "address_parser_vocab.trie",
+        "sha256": "01efac50124697e21f0b674e0df8a877bc2a64e1e1235e20f0a3390dfeb78f77"
+      }
+    ],
+    "deepparse": [
+      {
+        "file": "model.safetensors",
+        "sha256": "4d761100d70631a3cb53853a530ad39f5be09cedad0f8c3be0d968bd8accecb5"
+      },
+      {
+        "file": "multi.wiki.bpe.vs100000.d300.w2v.bin",
+        "sha256": "bb4d89f01e71046895fde0fe954845e3cc91ff888a63f06e6413328de308ad03"
+      },
+      {
+        "file": "multi.wiki.bpe.vs100000.model",
+        "sha256": "c6064152904900f91e04c97f95e591495f1c601eba70c3a46417f97283c2fdf1"
+      }
+    ]
+  },
+  "previous_model_inventory_sha256": "f5cd18421a97eb7f5085f48658ac82971aa8a928970004b5440ff53ae0e0cd59",
+  "inputs_sha256": "dc3ef9fcbd2635619d406b82dbca6be7c8b749e3fc66fd6a1fd1ec0b4f6f546e",
+  "protocol_version": 4,
+  "harness_sha256": {
+    "packages/training/scripts/broader_benchmark.py": "de76d0771cac8434f349242c3be253a4955b97279527eba2d1dc1e8ca385d1ea",
+    "packages/training/scripts/external_benchmark.py": "10f5188a8c8151ac7c54c2c892d66ae618bf2927273e44ea66a87b454ca77774",
+    "packages/training/scripts/website_benchmark.py": "67693e89c776a464515f6bae636a5b43b946224717eddcf40cd2292e05c67023"
+  }
+}

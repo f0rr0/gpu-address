@@ -1,0 +1,67 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: var(--font-geist);
+  --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-instrument-serif);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
+  --color-chart-7: var(--chart-7);
+  --radius-sm: 2px;
+  --radius-md: 2px;
+  --radius-lg: 3px;
+  --radius-xl: 4px;
+  --radius-4xl: 3px;
+}
+
+:root {
+  --background: #111111;
+  --foreground: #ededed;
+  --card: #191919;
+  --card-foreground: var(--foreground);
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+  --primary: #e5e5e5;
+  --primary-foreground: var(--background);
+  --secondary: #202020;
+  --secondary-foreground: var(--foreground);
+  --muted: #202020;
+  --muted-foreground: #a3a3a3;
+  --accent: var(--muted);
+  --accent-foreground: var(--foreground);
+  --destructive: #ffa099;
+  --border: #303030;
+  --input: #404040;
+  --ring: var(--muted-foreground);
+  --chart-1: #a3c9a8;
+  --chart-2: #91b9d8;
+  --chart-3: #dfbc82;
+  --chart-4: #b5a0d6;
+  --chart-5: #d9a0ae;
+  --chart-6: #84c9bd;
+  --chart-7: #dca58d;
+}

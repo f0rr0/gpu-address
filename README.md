@@ -79,6 +79,12 @@ Address validation and deliverability checks require separate services. See the
 [model card](https://github.com/f0rr0/gpu-postal/blob/main/MODEL_CARD.md) for
 country results, comparisons and evaluation details.
 
+The [public-address benchmark](apps/website/public/evaluation-v4/README.md)
+publishes 842 US NAD addresses across 40 states and 200 UK registered offices
+across all four nations, with all four parsers' outputs. Field F1 and whole-address
+exact match are reported separately, including UK groups with and without source
+counties. This is author-run agreement with registry fields, not national accuracy.
+
 ## Development
 
 Node.js 22+:
@@ -97,6 +103,16 @@ uv sync --locked
 uv run pytest
 uv run gpu-postal --help
 ```
+
+The Next.js demo lives in `apps/website`: `npm run dev:website` locally,
+`npm run build:website` for a production build. On Vercel, select Next.js,
+set the root directory to `apps/website`, and enable access to files outside
+that directory for the core workspace. The demo serves the model with Brotli
+content encoding; the website itself is not included in the package-size figure.
+
+Website comparison data is published at `/benchmarks.json`. Reproduction uses
+`packages/training/scripts/website_benchmark.py` and the named comparator assets.
+These are Senzing's public development tests, not a blind benchmark.
 
 ## License
 

@@ -3,9 +3,12 @@
   "private": true,
   "type": "module",
   "workspaces": [
-    "packages/core"
+    "packages/core",
+    "apps/website"
   ],
   "scripts": {
+    "dev:website": "npm run dev --workspace apps/website",
+    "build:website": "npm run build --workspace apps/website",
     "build": "npm run build --workspace packages/core",
     "test": "npm run build && npm test --workspace packages/core",
     "test:parity": "node packages/core/test/parity.mjs"

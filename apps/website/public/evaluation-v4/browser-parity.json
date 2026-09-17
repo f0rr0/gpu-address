@@ -1,0 +1,9 @@
+{
+  "status": "passed",
+  "rows": 1042,
+  "differences": [],
+  "modelSha256": "e97cfb86c5ec703ad70ba684f2f373a44dc9c9e1018e517ab6799e74aa5ce84a",
+  "inputsSha256": "dc3ef9fcbd2635619d406b82dbca6be7c8b749e3fc66fd6a1fd1ec0b4f6f546e",
+  "browser": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36",
+  "checkedAt": "2026-09-17T04:05:22.892Z"
+}

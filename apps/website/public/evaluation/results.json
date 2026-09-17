@@ -1,0 +1,1623 @@
+{
+  "manifest": {
+    "frozen_at": "2026-09-17T03:26:46.564193+00:00",
+    "seed": "external-us-uk-v1-20260917",
+    "inputs_sha256": "1324c2f4f53a75e8954aa587c8e0db0669eb2e500b51a68b4bd93de9aa9cbd4c",
+    "preparation_sha256": "8b6040c59ff6857a0cf3bdd9fecee9aa96560e99a1024df42a2e41fcc954feb1",
+    "model_sha256": "e97cfb86c5ec703ad70ba684f2f373a44dc9c9e1018e517ab6799e74aa5ce84a",
+    "checkpoint_sha256": "436dc0a84fca3816a851f28a5eb56d716153acc993748ddc16768e7c6502e7ec",
+    "sources": {
+      "fdic-0.json": {
+        "url": "https://api.fdic.gov/banks/locations?limit=10000&offset=0&fields=UNINUM%2CADDRESS%2CADDRESS2%2CCITY%2CSTALP%2CZIP&sort_by=UNINUM&sort_order=ASC&format=json",
+        "sha256": "1e255b4dbc4f083fee00ca92aff3358bc261d6d5b021bbb0a5dd304b9741823e"
+      },
+      "fdic-10000.json": {
+        "url": "https://api.fdic.gov/banks/locations?limit=10000&offset=10000&fields=UNINUM%2CADDRESS%2CADDRESS2%2CCITY%2CSTALP%2CZIP&sort_by=UNINUM&sort_order=ASC&format=json",
+        "sha256": "00b56239ed6010f12b429c57515f0da5fb023fc4ce89927a8862ed0582c62fa7"
+      },
+      "fdic-20000.json": {
+        "url": "https://api.fdic.gov/banks/locations?limit=10000&offset=20000&fields=UNINUM%2CADDRESS%2CADDRESS2%2CCITY%2CSTALP%2CZIP&sort_by=UNINUM&sort_order=ASC&format=json",
+        "sha256": "b79b4b146a8535c165680dd5232f0fe021ab47629917fc670540000ace23696c"
+      },
+      "fdic-30000.json": {
+        "url": "https://api.fdic.gov/banks/locations?limit=10000&offset=30000&fields=UNINUM%2CADDRESS%2CADDRESS2%2CCITY%2CSTALP%2CZIP&sort_by=UNINUM&sort_order=ASC&format=json",
+        "sha256": "590b2127acd94604ac2db9ba00f38a7efa260ce817ceffed157ac5b401308a85"
+      },
+      "fdic-40000.json": {
+        "url": "https://api.fdic.gov/banks/locations?limit=10000&offset=40000&fields=UNINUM%2CADDRESS%2CADDRESS2%2CCITY%2CSTALP%2CZIP&sort_by=UNINUM&sort_order=ASC&format=json",
+        "sha256": "b06c470863360af296945b1fd521ca019b2dc7885c852a6aee11664ef2d00c6f"
+      },
+      "fdic-50000.json": {
+        "url": "https://api.fdic.gov/banks/locations?limit=10000&offset=50000&fields=UNINUM%2CADDRESS%2CADDRESS2%2CCITY%2CSTALP%2CZIP&sort_by=UNINUM&sort_order=ASC&format=json",
+        "sha256": "2613db81797aecb68895484953f3c96eaf9439f00b879af2766a93586ab7cfe9"
+      },
+      "fdic-60000.json": {
+        "url": "https://api.fdic.gov/banks/locations?limit=10000&offset=60000&fields=UNINUM%2CADDRESS%2CADDRESS2%2CCITY%2CSTALP%2CZIP&sort_by=UNINUM&sort_order=ASC&format=json",
+        "sha256": "d8770df25cb1c8581951e7841b3115a833f72607b0b43dd9e1f0c64d6eddbe58"
+      },
+      "fdic-70000.json": {
+        "url": "https://api.fdic.gov/banks/locations?limit=10000&offset=70000&fields=UNINUM%2CADDRESS%2CADDRESS2%2CCITY%2CSTALP%2CZIP&sort_by=UNINUM&sort_order=ASC&format=json",
+        "sha256": "d2050e5a7101b1f57ed959ea1fb79a3cc9aa6ceb50a42c790f15cd4a515a38cb"
+      },
+      "england.csv": {
+        "url": "https://ea-edubase-api-prod.azurewebsites.net/edubase/downloads/public/edubasealldata20260917.csv",
+        "sha256": "f75c41e7e6eed1d2efe8dafa42d5ea25ebab3f0eb92cab50c9042815f5ba8ccd"
+      },
+      "ni.json": {
+        "url": "https://admin.opendatani.gov.uk/api/3/action/datastore_search?resource_id=7d088873-e181-423c-a149-a6726eec2179&limit=1000",
+        "sha256": "19d9bd9950262142f7216cdb9c89dea7b4412db48574b9884fe6acbe1cd280b5"
+      }
+    },
+    "eligible": {
+      "ME": 425,
+      "MA": 1858,
+      "NH": 380,
+      "AL": 1387,
+      "AR": 1322,
+      "FL": 4323,
+      "GA": 2069,
+      "IN": 1767,
+      "IA": 1414,
+      "KY": 1467,
+      "LA": 1346,
+      "MS": 1077,
+      "MT": 369,
+      "NC": 2049,
+      "OH": 3029,
+      "OK": 1286,
+      "PA": 3326,
+      "SD": 432,
+      "WA": 1350,
+      "WY": 209,
+      "NJ": 2223,
+      "NY": 3958,
+      "DE": 235,
+      "WV": 551,
+      "MD": 1121,
+      "SC": 1175,
+      "VA": 1833,
+      "TN": 1996,
+      "IL": 3598,
+      "MI": 1968,
+      "TX": 6336,
+      "WI": 1639,
+      "MO": 2090,
+      "MN": 1571,
+      "CO": 1386,
+      "KS": 1332,
+      "NE": 1007,
+      "NM": 402,
+      "CA": 5507,
+      "ID": 405,
+      "UT": 527,
+      "ND": 408,
+      "RI": 247,
+      "DC": 177,
+      "NV": 397,
+      "OR": 725,
+      "CT": 921,
+      "VT": 217,
+      "AK": 112,
+      "HI": 210,
+      "AZ": 972,
+      "London": 1335,
+      "South East": 1607,
+      "West Midlands": 893,
+      "North West": 1171,
+      "Yorkshire and the Humber": 872,
+      "North East": 496,
+      "South West": 1054,
+      "East of England": 1152,
+      "East Midlands": 643,
+      "Northern Ireland": 98
+    },
+    "exclusions": {
+      "duplicate_entity": 1631,
+      "training_or_previous_evaluation_entity": 385,
+      "US_territory_or_foreign": 1118,
+      "England_additional_address_lines": 14661,
+      "England_closed_or_no_region": 27449,
+      "missing_required_field": 55
+    },
+    "selected": {
+      "AK": 20,
+      "AL": 20,
+      "AR": 20,
+      "AZ": 20,
+      "CA": 20,
+      "CO": 20,
+      "CT": 20,
+      "DC": 20,
+      "DE": 20,
+      "East Midlands": 50,
+      "East of England": 50,
+      "FL": 20,
+      "GA": 20,
+      "HI": 20,
+      "IA": 20,
+      "ID": 20,
+      "IL": 20,
+      "IN": 20,
+      "KS": 20,
+      "KY": 20,
+      "LA": 20,
+      "London": 50,
+      "MA": 20,
+      "MD": 20,
+      "ME": 20,
+      "MI": 20,
+      "MN": 20,
+      "MO": 20,
+      "MS": 20,
+      "MT": 20,
+      "NC": 20,
+      "ND": 20,
+      "NE": 20,
+      "NH": 20,
+      "NJ": 20,
+      "NM": 20,
+      "NV": 20,
+      "NY": 20,
+      "North East": 50,
+      "North West": 50,
+      "Northern Ireland": 50,
+      "OH": 20,
+      "OK": 20,
+      "OR": 20,
+      "PA": 20,
+      "RI": 20,
+      "SC": 20,
+      "SD": 20,
+      "South East": 50,
+      "South West": 50,
+      "TN": 20,
+      "TX": 20,
+      "UT": 20,
+      "VA": 20,
+      "VT": 20,
+      "WA": 20,
+      "WI": 20,
+      "WV": 20,
+      "WY": 20,
+      "West Midlands": 50,
+      "Yorkshire and the Humber": 50
+    },
+    "rows": 10640,
+    "entities": 1520,
+    "labels": "Source-provided fields; no parser or LLM-generated gold. Canonical comma-separated core-field rendering; organization names and optional UK counties omitted.",
+    "selection": "20 per US state plus DC; 50 per English region plus 50 Northern Ireland libraries; SHA-256 ranking of seed + source ID; no prediction-based selection.",
+    "overlap": "Exclude normalized street+city OR street+postcode matches in released-model training and previous Senzing/GeoSearch evaluations. Near matches and competitor overlap unknown.",
+    "metric": "Exact per-field NFKC/casefold token multisets; case, commas, whitespace ignored; all other punctuation and token multiplicities retained. Extra fields fail. Micro field F1 also reported.",
+    "intervals": "95% Wilson intervals within each cohort. All cohorts share the same entities; never pool them as independent samples.",
+    "limitations": "Author-run external-source diagnostic, not third-party verification. Structured institutional addresses, not natural user traffic. UK covers England and Northern Ireland only. Balanced strata are not population weights. All six robustness variants are synthetic and separately scored. No claims for Scotland or Wales.",
+    "models": {
+      "gpu": "gpu-postal int5 experimental.2 (Python reconstruction of release weights)",
+      "libpostal": "libpostal default v1.0.0",
+      "senzing": "libpostal Senzing v1.2",
+      "deepparse": "Deepparse 0.10.0 BPEmb + attention"
+    },
+    "protocol_version": 2,
+    "robustness_frozen_at": "2026-09-17T03:28:16.951613+00:00",
+    "robustness_code_sha256": "6de4f521a619fde6629ada4c8f359d752d22a15fbe4eb27ca5df59e7bdc30fee",
+    "cohorts": [
+      "complete",
+      "no-postcode",
+      "no-city",
+      "no-street",
+      "lowercase",
+      "no-commas",
+      "multiline"
+    ],
+    "amendment": "User rejected missing-postcode-only robustness after v1 inference began. Source entities and gold unchanged; no predictions or scores inspected before amendment. v1 protocol retained."
+  },
+  "groups": [
+    {
+      "country": "us",
+      "cohort": "complete",
+      "rows": 1020,
+      "models": {
+        "gpu": {
+          "correct": 1010,
+          "percent": 99.01960784313725,
+          "interval": [
+            98.2047623845394,
+            99.46660962181053
+          ],
+          "field_f1": 99.64465139076094,
+          "fields": {
+            "postcode": {
+              "rows": 1020,
+              "correct": 1019
+            },
+            "state": {
+              "rows": 1020,
+              "correct": 1018
+            },
+            "street_address": {
+              "rows": 1020,
+              "correct": 1015
+            },
+            "city": {
+              "rows": 1020,
+              "correct": 1014
+            }
+          }
+        },
+        "libpostal": {
+          "correct": 1015,
+          "percent": 99.50980392156863,
+          "interval": [
+            98.85764450008871,
+            99.79044122632472
+          ],
+          "field_f1": 99.791692194584,
+          "fields": {
+            "postcode": {
+              "rows": 1020,
+              "correct": 1019
+            },
+            "state": {
+              "rows": 1020,
+              "correct": 1019
+            },
+            "street_address": {
+              "rows": 1020,
+              "correct": 1018
+            },
+            "city": {
+              "rows": 1020,
+              "correct": 1016
+            }
+          }
+        },
+        "senzing": {
+          "correct": 1010,
+          "percent": 99.01960784313725,
+          "interval": [
+            98.2047623845394,
+            99.46660962181053
+          ],
+          "field_f1": 99.53385672227674,
+          "fields": {
+            "postcode": {
+              "rows": 1020,
+              "correct": 1019
+            },
+            "state": {
+              "rows": 1020,
+              "correct": 1015
+            },
+            "street_address": {
+              "rows": 1020,
+              "correct": 1013
+            },
+            "city": {
+              "rows": 1020,
+              "correct": 1010
+            }
+          }
+        },
+        "deepparse": {
+          "correct": 1005,
+          "percent": 98.52941176470588,
+          "interval": [
+            97.58785208480629,
+            99.10680620148017
+          ],
+          "field_f1": 99.26470588235294,
+          "fields": {
+            "postcode": {
+              "rows": 1020,
+              "correct": 1020
+            },
+            "state": {
+              "rows": 1020,
+              "correct": 1020
+            },
+            "street_address": {
+              "rows": 1020,
+              "correct": 1005
+            },
+            "city": {
+              "rows": 1020,
+              "correct": 1005
+            }
+          }
+        }
+      }
+    },
+    {
+      "country": "us",
+      "cohort": "no-postcode",
+      "rows": 1020,
+      "models": {
+        "gpu": {
+          "correct": 1012,
+          "percent": 99.2156862745098,
+          "interval": [
+            98.46000746250522,
+            99.60205003187012
+          ],
+          "field_f1": 99.6243671402907,
+          "fields": {
+            "state": {
+              "rows": 1020,
+              "correct": 1019
+            },
+            "street_address": {
+              "rows": 1020,
+              "correct": 1016
+            },
+            "city": {
+              "rows": 1020,
+              "correct": 1015
+            }
+          }
+        },
+        "libpostal": {
+          "correct": 1015,
+          "percent": 99.50980392156863,
+          "interval": [
+            98.85764450008871,
+            99.79044122632472
+          ],
+          "field_f1": 99.73864750081673,
+          "fields": {
+            "state": {
+              "rows": 1020,
+              "correct": 1019
+            },
+            "street_address": {
+              "rows": 1020,
+              "correct": 1018
+            },
+            "city": {
+              "rows": 1020,
+              "correct": 1016
+            }
+          }
+        },
+        "senzing": {
+          "correct": 1010,
+          "percent": 99.01960784313725,
+          "interval": [
+            98.2047623845394,
+            99.46660962181053
+          ],
+          "field_f1": 99.39473253721577,
+          "fields": {
+            "state": {
+              "rows": 1020,
+              "correct": 1015
+            },
+            "street_address": {
+              "rows": 1020,
+              "correct": 1013
+            },
+            "city": {
+              "rows": 1020,
+              "correct": 1010
+            }
+          }
+        },
+        "deepparse": {
+          "correct": 107,
+          "percent": 10.490196078431373,
+          "interval": [
+            8.755615722149587,
+            12.52125844073237
+          ],
+          "field_f1": 59.1123162551734,
+          "fields": {
+            "state": {
+              "rows": 1020,
+              "correct": 1013
+            },
+            "street_address": {
+              "rows": 1020,
+              "correct": 112
+            },
+            "city": {
+              "rows": 1020,
+              "correct": 946
+            }
+          }
+        }
+      }
+    },
+    {
+      "country": "us",
+      "cohort": "no-city",
+      "rows": 1020,
+      "models": {
+        "gpu": {
+          "correct": 778,
+          "percent": 76.27450980392157,
+          "interval": [
+            73.56833575236593,
+            78.78351964303762
+          ],
+          "field_f1": 91.12772180695482,
+          "fields": {
+            "postcode": {
+              "rows": 1020,
+              "correct": 1010
+            },
+            "state": {
+              "rows": 1020,
+              "correct": 826
+            },
+            "street_address": {
+              "rows": 1020,
+              "correct": 968
+            }
+          }
+        },
+        "libpostal": {
+          "correct": 519,
+          "percent": 50.88235294117647,
+          "interval": [
+            47.81683665827606,
+            53.94124803783823
+          ],
+          "field_f1": 74.41060058509723,
+          "fields": {
+            "postcode": {
+              "rows": 1020,
+              "correct": 1017
+            },
+            "state": {
+              "rows": 1020,
+              "correct": 602
+            },
+            "street_address": {
+              "rows": 1020,
+              "correct": 543
+            }
+          }
+        },
+        "senzing": {
+          "correct": 982,
+          "percent": 96.27450980392157,
+          "interval": [
+            94.92791037790924,
+            97.27386479608509
+          ],
+          "field_f1": 98.0971128608924,
+          "fields": {
+            "postcode": {
+              "rows": 1020,
+              "correct": 1018
+            },
+            "state": {
+              "rows": 1020,
+              "correct": 988
+            },
+            "street_address": {
+              "rows": 1020,
+              "correct": 984
+            }
+          }
+        },
+        "deepparse": {
+          "correct": 0,
+          "percent": 0.0,
+          "interval": [
+            0.0,
+            0.3752005535230695
+          ],
+          "field_f1": 56.00224121025354,
+          "fields": {
+            "postcode": {
+              "rows": 1020,
+              "correct": 1016
+            },
+            "state": {
+              "rows": 1020,
+              "correct": 983
+            },
+            "street_address": {
+              "rows": 1020,
+              "correct": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "country": "us",
+      "cohort": "no-street",
+      "rows": 1020,
+      "models": {
+        "gpu": {
+          "correct": 1016,
+          "percent": 99.6078431372549,
+          "interval": [
+            98.9960330981502,
+            99.84739537227593
+          ],
+          "field_f1": 99.86928104575163,
+          "fields": {
+            "postcode": {
+              "rows": 1020,
+              "correct": 1020
+            },
+            "state": {
+              "rows": 1020,
+              "correct": 1020
+            },
+            "city": {
+              "rows": 1020,
+              "correct": 1016
+            }
+          }
+        },
+        "libpostal": {
+          "correct": 1015,
+          "percent": 99.50980392156863,
+          "interval": [
+            98.85764450008871,
+            99.79044122632472
+          ],
+          "field_f1": 99.80385746976135,
+          "fields": {
+            "postcode": {
+              "rows": 1020,
+              "correct": 1019
+            },
+            "state": {
+              "rows": 1020,
+              "correct": 1019
+            },
+            "city": {
+              "rows": 1020,
+              "correct": 1015
+            }
+          }
+        },
+        "senzing": {
+          "correct": 1013,
+          "percent": 99.31372549019608,
+          "interval": [
+            98.59022275507016,
+            99.66717748331787
+          ],
+          "field_f1": 99.67288191036964,
+          "fields": {
+            "postcode": {
+              "rows": 1020,
+              "correct": 1018
+            },
+            "state": {
+              "rows": 1020,
+              "correct": 1016
+            },
+            "city": {
+              "rows": 1020,
+              "correct": 1013
+            }
+          }
+        },
+        "deepparse": {
+          "correct": 0,
+          "percent": 0.0,
+          "interval": [
+            0.0,
+            0.3752005535230695
+          ],
+          "field_f1": 63.02494474265867,
+          "fields": {
+            "postcode": {
+              "rows": 1020,
+              "correct": 1005
+            },
+            "state": {
+              "rows": 1020,
+              "correct": 991
+            },
+            "city": {
+              "rows": 1020,
+              "correct": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "country": "us",
+      "cohort": "lowercase",
+      "rows": 1020,
+      "models": {
+        "gpu": {
+          "correct": 1009,
+          "percent": 98.92156862745098,
+          "interval": [
+            98.0792608974734,
+            99.39676836486383
+          ],
+          "field_f1": 99.62014459012376,
+          "fields": {
+            "postcode": {
+              "rows": 1020,
+              "correct": 1019
+            },
+            "state": {
+              "rows": 1020,
+              "correct": 1017
+            },
+            "street_address": {
+              "rows": 1020,
+              "correct": 1015
+            },
+            "city": {
+              "rows": 1020,
+              "correct": 1014
+            }
+          }
+        },
+        "libpostal": {
+          "correct": 1015,
+          "percent": 99.50980392156863,
+          "interval": [
+            98.85764450008871,
+            99.79044122632472
+          ],
+          "field_f1": 99.791692194584,
+          "fields": {
+            "postcode": {
+              "rows": 1020,
+              "correct": 1019
+            },
+            "state": {
+              "rows": 1020,
+              "correct": 1019
+            },
+            "street_address": {
+              "rows": 1020,
+              "correct": 1018
+            },
+            "city": {
+              "rows": 1020,
+              "correct": 1016
+            }
+          }
+        },
+        "senzing": {
+          "correct": 1010,
+          "percent": 99.01960784313725,
+          "interval": [
+            98.2047623845394,
+            99.46660962181053
+          ],
+          "field_f1": 99.53385672227674,
+          "fields": {
+            "postcode": {
+              "rows": 1020,
+              "correct": 1019
+            },
+            "state": {
+              "rows": 1020,
+              "correct": 1015
+            },
+            "street_address": {
+              "rows": 1020,
+              "correct": 1013
+            },
+            "city": {
+              "rows": 1020,
+              "correct": 1010
+            }
+          }
+        },
+        "deepparse": {
+          "correct": 1005,
+          "percent": 98.52941176470588,
+          "interval": [
+            97.58785208480629,
+            99.10680620148017
+          ],
+          "field_f1": 99.26470588235294,
+          "fields": {
+            "postcode": {
+              "rows": 1020,
+              "correct": 1020
+            },
+            "state": {
+              "rows": 1020,
+              "correct": 1020
+            },
+            "street_address": {
+              "rows": 1020,
+              "correct": 1005
+            },
+            "city": {
+              "rows": 1020,
+              "correct": 1005
+            }
+          }
+        }
+      }
+    },
+    {
+      "country": "us",
+      "cohort": "no-commas",
+      "rows": 1020,
+      "models": {
+        "gpu": {
+          "correct": 990,
+          "percent": 97.05882352941177,
+          "interval": [
+            95.83237788800278,
+            97.93213923809314
+          ],
+          "field_f1": 98.64220183486239,
+          "fields": {
+            "postcode": {
+              "rows": 1020,
+              "correct": 1019
+            },
+            "state": {
+              "rows": 1020,
+              "correct": 1019
+            },
+            "street_address": {
+              "rows": 1020,
+              "correct": 1000
+            },
+            "city": {
+              "rows": 1020,
+              "correct": 994
+            }
+          }
+        },
+        "libpostal": {
+          "correct": 1015,
+          "percent": 99.50980392156863,
+          "interval": [
+            98.85764450008871,
+            99.79044122632472
+          ],
+          "field_f1": 99.791692194584,
+          "fields": {
+            "postcode": {
+              "rows": 1020,
+              "correct": 1019
+            },
+            "state": {
+              "rows": 1020,
+              "correct": 1019
+            },
+            "street_address": {
+              "rows": 1020,
+              "correct": 1018
+            },
+            "city": {
+              "rows": 1020,
+              "correct": 1016
+            }
+          }
+        },
+        "senzing": {
+          "correct": 1010,
+          "percent": 99.01960784313725,
+          "interval": [
+            98.2047623845394,
+            99.46660962181053
+          ],
+          "field_f1": 99.53385672227674,
+          "fields": {
+            "postcode": {
+              "rows": 1020,
+              "correct": 1019
+            },
+            "state": {
+              "rows": 1020,
+              "correct": 1015
+            },
+            "street_address": {
+              "rows": 1020,
+              "correct": 1013
+            },
+            "city": {
+              "rows": 1020,
+              "correct": 1010
+            }
+          }
+        },
+        "deepparse": {
+          "correct": 1005,
+          "percent": 98.52941176470588,
+          "interval": [
+            97.58785208480629,
+            99.10680620148017
+          ],
+          "field_f1": 99.26470588235294,
+          "fields": {
+            "postcode": {
+              "rows": 1020,
+              "correct": 1020
+            },
+            "state": {
+              "rows": 1020,
+              "correct": 1020
+            },
+            "street_address": {
+              "rows": 1020,
+              "correct": 1005
+            },
+            "city": {
+              "rows": 1020,
+              "correct": 1005
+            }
+          }
+        }
+      }
+    },
+    {
+      "country": "us",
+      "cohort": "multiline",
+      "rows": 1020,
+      "models": {
+        "gpu": {
+          "correct": 988,
+          "percent": 96.86274509803921,
+          "interval": [
+            95.60474804521378,
+            97.76908359285676
+          ],
+          "field_f1": 98.5691573926868,
+          "fields": {
+            "postcode": {
+              "rows": 1020,
+              "correct": 1019
+            },
+            "state": {
+              "rows": 1020,
+              "correct": 1019
+            },
+            "street_address": {
+              "rows": 1020,
+              "correct": 998
+            },
+            "city": {
+              "rows": 1020,
+              "correct": 994
+            }
+          }
+        },
+        "libpostal": {
+          "correct": 1015,
+          "percent": 99.50980392156863,
+          "interval": [
+            98.85764450008871,
+            99.79044122632472
+          ],
+          "field_f1": 99.791692194584,
+          "fields": {
+            "postcode": {
+              "rows": 1020,
+              "correct": 1019
+            },
+            "state": {
+              "rows": 1020,
+              "correct": 1019
+            },
+            "street_address": {
+              "rows": 1020,
+              "correct": 1018
+            },
+            "city": {
+              "rows": 1020,
+              "correct": 1016
+            }
+          }
+        },
+        "senzing": {
+          "correct": 1010,
+          "percent": 99.01960784313725,
+          "interval": [
+            98.2047623845394,
+            99.46660962181053
+          ],
+          "field_f1": 99.53385672227674,
+          "fields": {
+            "postcode": {
+              "rows": 1020,
+              "correct": 1019
+            },
+            "state": {
+              "rows": 1020,
+              "correct": 1015
+            },
+            "street_address": {
+              "rows": 1020,
+              "correct": 1013
+            },
+            "city": {
+              "rows": 1020,
+              "correct": 1010
+            }
+          }
+        },
+        "deepparse": {
+          "correct": 1005,
+          "percent": 98.52941176470588,
+          "interval": [
+            97.58785208480629,
+            99.10680620148017
+          ],
+          "field_f1": 99.26470588235294,
+          "fields": {
+            "postcode": {
+              "rows": 1020,
+              "correct": 1020
+            },
+            "state": {
+              "rows": 1020,
+              "correct": 1020
+            },
+            "street_address": {
+              "rows": 1020,
+              "correct": 1005
+            },
+            "city": {
+              "rows": 1020,
+              "correct": 1005
+            }
+          }
+        }
+      }
+    },
+    {
+      "country": "gb",
+      "cohort": "complete",
+      "rows": 500,
+      "models": {
+        "gpu": {
+          "correct": 465,
+          "percent": 93.0,
+          "interval": [
+            90.4202810148084,
+            94.92402570549815
+          ],
+          "field_f1": 97.36754415194935,
+          "fields": {
+            "postcode": {
+              "rows": 500,
+              "correct": 500
+            },
+            "street_address": {
+              "rows": 500,
+              "correct": 469
+            },
+            "city": {
+              "rows": 500,
+              "correct": 492
+            }
+          }
+        },
+        "libpostal": {
+          "correct": 472,
+          "percent": 94.4,
+          "interval": [
+            92.02552063532939,
+            96.09743793168481
+          ],
+          "field_f1": 97.24832214765101,
+          "fields": {
+            "postcode": {
+              "rows": 500,
+              "correct": 489
+            },
+            "street_address": {
+              "rows": 500,
+              "correct": 475
+            },
+            "city": {
+              "rows": 500,
+              "correct": 485
+            }
+          }
+        },
+        "senzing": {
+          "correct": 477,
+          "percent": 95.4,
+          "interval": [
+            93.19222072317275,
+            96.91548916291835
+          ],
+          "field_f1": 98.09809809809809,
+          "fields": {
+            "postcode": {
+              "rows": 500,
+              "correct": 499
+            },
+            "street_address": {
+              "rows": 500,
+              "correct": 479
+            },
+            "city": {
+              "rows": 500,
+              "correct": 492
+            }
+          }
+        },
+        "deepparse": {
+          "correct": 31,
+          "percent": 6.2,
+          "interval": [
+            4.401920914268197,
+            8.665971310163743
+          ],
+          "field_f1": 34.938022484865954,
+          "fields": {
+            "postcode": {
+              "rows": 500,
+              "correct": 495
+            },
+            "street_address": {
+              "rows": 500,
+              "correct": 75
+            },
+            "city": {
+              "rows": 500,
+              "correct": 36
+            }
+          }
+        }
+      }
+    },
+    {
+      "country": "gb",
+      "cohort": "no-postcode",
+      "rows": 500,
+      "models": {
+        "gpu": {
+          "correct": 441,
+          "percent": 88.2,
+          "interval": [
+            85.07680121388816,
+            90.7406991748493
+          ],
+          "field_f1": 92.03007518796993,
+          "fields": {
+            "street_address": {
+              "rows": 500,
+              "correct": 447
+            },
+            "city": {
+              "rows": 500,
+              "correct": 471
+            }
+          }
+        },
+        "libpostal": {
+          "correct": 464,
+          "percent": 92.8,
+          "interval": [
+            90.19315959830384,
+            94.75419685818734
+          ],
+          "field_f1": 94.90670700958144,
+          "fields": {
+            "street_address": {
+              "rows": 500,
+              "correct": 471
+            },
+            "city": {
+              "rows": 500,
+              "correct": 470
+            }
+          }
+        },
+        "senzing": {
+          "correct": 470,
+          "percent": 94.0,
+          "interval": [
+            91.5638936874781,
+            95.76516435190534
+          ],
+          "field_f1": 96.18090452261306,
+          "fields": {
+            "street_address": {
+              "rows": 500,
+              "correct": 473
+            },
+            "city": {
+              "rows": 500,
+              "correct": 484
+            }
+          }
+        },
+        "deepparse": {
+          "correct": 0,
+          "percent": 0.0,
+          "interval": [
+            -4.336808689942018e-17,
+            0.7624340461551825
+          ],
+          "field_f1": 0.0,
+          "fields": {
+            "street_address": {
+              "rows": 500,
+              "correct": 0
+            },
+            "city": {
+              "rows": 500,
+              "correct": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "country": "gb",
+      "cohort": "no-city",
+      "rows": 500,
+      "models": {
+        "gpu": {
+          "correct": 366,
+          "percent": 73.2,
+          "interval": [
+            69.1516279462189,
+            76.8946026563651
+          ],
+          "field_f1": 86.47029455816275,
+          "fields": {
+            "postcode": {
+              "rows": 500,
+              "correct": 500
+            },
+            "street_address": {
+              "rows": 500,
+              "correct": 366
+            }
+          }
+        },
+        "libpostal": {
+          "correct": 302,
+          "percent": 60.4,
+          "interval": [
+            56.049584068675564,
+            64.59182964972415
+          ],
+          "field_f1": 68.23027718550107,
+          "fields": {
+            "postcode": {
+              "rows": 500,
+              "correct": 337
+            },
+            "street_address": {
+              "rows": 500,
+              "correct": 303
+            }
+          }
+        },
+        "senzing": {
+          "correct": 420,
+          "percent": 84.0,
+          "interval": [
+            80.52918208363096,
+            86.95236276498352
+          ],
+          "field_f1": 89.0909090909091,
+          "fields": {
+            "postcode": {
+              "rows": 500,
+              "correct": 457
+            },
+            "street_address": {
+              "rows": 500,
+              "correct": 425
+            }
+          }
+        },
+        "deepparse": {
+          "correct": 0,
+          "percent": 0.0,
+          "interval": [
+            -4.336808689942018e-17,
+            0.7624340461551825
+          ],
+          "field_f1": 36.30839346752754,
+          "fields": {
+            "postcode": {
+              "rows": 500,
+              "correct": 478
+            },
+            "street_address": {
+              "rows": 500,
+              "correct": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "country": "gb",
+      "cohort": "no-street",
+      "rows": 500,
+      "models": {
+        "gpu": {
+          "correct": 496,
+          "percent": 99.2,
+          "interval": [
+            97.96129641658953,
+            99.68846848199378
+          ],
+          "field_f1": 99.40119760479043,
+          "fields": {
+            "postcode": {
+              "rows": 500,
+              "correct": 500
+            },
+            "city": {
+              "rows": 500,
+              "correct": 496
+            }
+          }
+        },
+        "libpostal": {
+          "correct": 443,
+          "percent": 88.6,
+          "interval": [
+            85.51509101576855,
+            91.09630990059966
+          ],
+          "field_f1": 93.39384770549673,
+          "fields": {
+            "postcode": {
+              "rows": 500,
+              "correct": 483
+            },
+            "city": {
+              "rows": 500,
+              "correct": 443
+            }
+          }
+        },
+        "senzing": {
+          "correct": 463,
+          "percent": 92.6,
+          "interval": [
+            89.96652466777704,
+            94.58388152489876
+          ],
+          "field_f1": 96.0519740129935,
+          "fields": {
+            "postcode": {
+              "rows": 500,
+              "correct": 498
+            },
+            "city": {
+              "rows": 500,
+              "correct": 463
+            }
+          }
+        },
+        "deepparse": {
+          "correct": 0,
+          "percent": 0.0,
+          "interval": [
+            -4.336808689942018e-17,
+            0.7624340461551825
+          ],
+          "field_f1": 48.4641638225256,
+          "fields": {
+            "postcode": {
+              "rows": 500,
+              "correct": 497
+            },
+            "city": {
+              "rows": 500,
+              "correct": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "country": "gb",
+      "cohort": "lowercase",
+      "rows": 500,
+      "models": {
+        "gpu": {
+          "correct": 463,
+          "percent": 92.6,
+          "interval": [
+            89.96652466777704,
+            94.58388152489876
+          ],
+          "field_f1": 97.1676107964012,
+          "fields": {
+            "postcode": {
+              "rows": 500,
+              "correct": 500
+            },
+            "street_address": {
+              "rows": 500,
+              "correct": 468
+            },
+            "city": {
+              "rows": 500,
+              "correct": 490
+            }
+          }
+        },
+        "libpostal": {
+          "correct": 472,
+          "percent": 94.4,
+          "interval": [
+            92.02552063532939,
+            96.09743793168481
+          ],
+          "field_f1": 97.24832214765101,
+          "fields": {
+            "postcode": {
+              "rows": 500,
+              "correct": 489
+            },
+            "street_address": {
+              "rows": 500,
+              "correct": 475
+            },
+            "city": {
+              "rows": 500,
+              "correct": 485
+            }
+          }
+        },
+        "senzing": {
+          "correct": 477,
+          "percent": 95.4,
+          "interval": [
+            93.19222072317275,
+            96.91548916291835
+          ],
+          "field_f1": 98.09809809809809,
+          "fields": {
+            "postcode": {
+              "rows": 500,
+              "correct": 499
+            },
+            "street_address": {
+              "rows": 500,
+              "correct": 479
+            },
+            "city": {
+              "rows": 500,
+              "correct": 492
+            }
+          }
+        },
+        "deepparse": {
+          "correct": 31,
+          "percent": 6.2,
+          "interval": [
+            4.401920914268197,
+            8.665971310163743
+          ],
+          "field_f1": 34.938022484865954,
+          "fields": {
+            "postcode": {
+              "rows": 500,
+              "correct": 495
+            },
+            "street_address": {
+              "rows": 500,
+              "correct": 75
+            },
+            "city": {
+              "rows": 500,
+              "correct": 36
+            }
+          }
+        }
+      }
+    },
+    {
+      "country": "gb",
+      "cohort": "no-commas",
+      "rows": 500,
+      "models": {
+        "gpu": {
+          "correct": 482,
+          "percent": 96.4,
+          "interval": [
+            94.38156730319729,
+            97.71089390197069
+          ],
+          "field_f1": 97.8709248170326,
+          "fields": {
+            "postcode": {
+              "rows": 500,
+              "correct": 500
+            },
+            "street_address": {
+              "rows": 500,
+              "correct": 489
+            },
+            "city": {
+              "rows": 500,
+              "correct": 482
+            }
+          }
+        },
+        "libpostal": {
+          "correct": 472,
+          "percent": 94.4,
+          "interval": [
+            92.02552063532939,
+            96.09743793168481
+          ],
+          "field_f1": 97.24832214765101,
+          "fields": {
+            "postcode": {
+              "rows": 500,
+              "correct": 489
+            },
+            "street_address": {
+              "rows": 500,
+              "correct": 475
+            },
+            "city": {
+              "rows": 500,
+              "correct": 485
+            }
+          }
+        },
+        "senzing": {
+          "correct": 477,
+          "percent": 95.4,
+          "interval": [
+            93.19222072317275,
+            96.91548916291835
+          ],
+          "field_f1": 98.09809809809809,
+          "fields": {
+            "postcode": {
+              "rows": 500,
+              "correct": 499
+            },
+            "street_address": {
+              "rows": 500,
+              "correct": 479
+            },
+            "city": {
+              "rows": 500,
+              "correct": 492
+            }
+          }
+        },
+        "deepparse": {
+          "correct": 31,
+          "percent": 6.2,
+          "interval": [
+            4.401920914268197,
+            8.665971310163743
+          ],
+          "field_f1": 34.938022484865954,
+          "fields": {
+            "postcode": {
+              "rows": 500,
+              "correct": 495
+            },
+            "street_address": {
+              "rows": 500,
+              "correct": 75
+            },
+            "city": {
+              "rows": 500,
+              "correct": 36
+            }
+          }
+        }
+      }
+    },
+    {
+      "country": "gb",
+      "cohort": "multiline",
+      "rows": 500,
+      "models": {
+        "gpu": {
+          "correct": 481,
+          "percent": 96.2,
+          "interval": [
+            94.14152274693568,
+            97.55398819441695
+          ],
+          "field_f1": 97.70535417359494,
+          "fields": {
+            "postcode": {
+              "rows": 500,
+              "correct": 500
+            },
+            "street_address": {
+              "rows": 500,
+              "correct": 488
+            },
+            "city": {
+              "rows": 500,
+              "correct": 481
+            }
+          }
+        },
+        "libpostal": {
+          "correct": 472,
+          "percent": 94.4,
+          "interval": [
+            92.02552063532939,
+            96.09743793168481
+          ],
+          "field_f1": 97.24832214765101,
+          "fields": {
+            "postcode": {
+              "rows": 500,
+              "correct": 489
+            },
+            "street_address": {
+              "rows": 500,
+              "correct": 475
+            },
+            "city": {
+              "rows": 500,
+              "correct": 485
+            }
+          }
+        },
+        "senzing": {
+          "correct": 477,
+          "percent": 95.4,
+          "interval": [
+            93.19222072317275,
+            96.91548916291835
+          ],
+          "field_f1": 98.09809809809809,
+          "fields": {
+            "postcode": {
+              "rows": 500,
+              "correct": 499
+            },
+            "street_address": {
+              "rows": 500,
+              "correct": 479
+            },
+            "city": {
+              "rows": 500,
+              "correct": 492
+            }
+          }
+        },
+        "deepparse": {
+          "correct": 31,
+          "percent": 6.2,
+          "interval": [
+            4.401920914268197,
+            8.665971310163743
+          ],
+          "field_f1": 34.938022484865954,
+          "fields": {
+            "postcode": {
+              "rows": 500,
+              "correct": 495
+            },
+            "street_address": {
+              "rows": 500,
+              "correct": 75
+            },
+            "city": {
+              "rows": 500,
+              "correct": 36
+            }
+          }
+        }
+      }
+    }
+  ],
+  "prediction_sha256": {
+    "gpu": "f2ba8cc8fba111e6a8e9be4215cfe9ee152bc43a2921c2f3272713f95648e4ea",
+    "libpostal": "1119ff108505a8c0d93a72b27d3b0c3ed71f6da9362b85642f4541ead713fb28",
+    "senzing": "5c78a5aa5b72c3996b2c8f49e9c410256953fe38343924b7238e79dfb5378a6e",
+    "deepparse": "086529d770b4e06bfb24754ff0337769dcba8aea82840023edaa348d5e53066a"
+  }
+}

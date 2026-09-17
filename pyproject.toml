@@ -13,6 +13,7 @@ dependencies = [
   "brotli==1.2.0",
   "numpy==2.4.6",
   "pyarrow==25.0.1",
+  "pyogrio>=0.13.0",
   "rdflib==7.6.0",
   "torch==2.14.0",
 ]

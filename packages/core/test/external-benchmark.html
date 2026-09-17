@@ -1,0 +1,37 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>External benchmark browser parity</title>
+<h1>External benchmark browser parity</h1>
+<pre id="result">Starting</pre>
+<script type="module">
+import { createParser } from '../dist/index.js';
+const output = document.querySelector('#result');
+let parser;
+try {
+  const dataset = new URLSearchParams(location.search).get('dataset') || 'evaluation-v4';
+  if (!['evaluation', 'evaluation-v3', 'evaluation-v4'].includes(dataset)) throw new Error('Unknown dataset');
+  const base = `/apps/website/public/${dataset}/`;
+  const [rows, expected, manifest] = await Promise.all(['inputs.json', 'gpu.json', 'manifest.json']
+    .map(path => fetch(base + path).then(r => { if (!r.ok) throw new Error(path); return r.json(); })));
+  const bytes = await fetch('../model.bin').then(r => r.arrayBuffer());
+  const hash = [...new Uint8Array(await crypto.subtle.digest('SHA-256', bytes))].map(x => x.toString(16).padStart(2, '0')).join('');
+  if (hash !== manifest.model_sha256) throw new Error('Wrong model');
+  parser = await createParser('../model.bin');
+  const differences = [];
+  const canonical = parts => parts.map(p => [p.label, p.raw, p.start, p.end]);
+  for (const [i, row] of rows.entries()) {
+    const actual = (await parser.parse(row.text)).components;
+    const python = expected[row.id].map(p => ({...p,
+      start: [...row.text].slice(0, p.start).join('').length,
+      end: [...row.text].slice(0, p.end).join('').length,
+    }));
+    if (JSON.stringify(canonical(actual)) !== JSON.stringify(canonical(python))) differences.push(row.id);
+    if (i % 100 === 0) output.textContent = `${i} / ${rows.length}`;
+  }
+  output.textContent = JSON.stringify({status: differences.length ? 'failed' : 'passed',
+    rows: rows.length, differences, modelSha256: hash, inputsSha256: manifest.inputs_sha256,
+    browser: navigator.userAgent, checkedAt: new Date().toISOString()}, null, 2);
+} catch (error) {
+  output.textContent = JSON.stringify({status: 'failed', error: String(error)});
+} finally { await parser?.dispose(); }
+</script>

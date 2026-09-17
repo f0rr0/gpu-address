@@ -1,0 +1,364 @@
+{
+  "source": {
+    "url": "https://raw.githubusercontent.com/Senzing/libpostal-data/5113929832ac06619d18a4816f78a90fef8cc7a3/files/tests/v1.2.0/test_data.csv",
+    "sha256": "db58065bf7508b862e9c6ee68774312bfc7e675192e21b8ee6aa9f7aa32ed51a",
+    "counts": {
+      "us": 2233,
+      "ca": 432,
+      "gb": 255,
+      "nz": 51,
+      "za": 53,
+      "ie": 51,
+      "au": 76
+    }
+  },
+  "metric": "Exact per-field token multisets: NFKC/casefold, commas and whitespace ignored, other punctuation and token counts retained. All seven fields scored; missing fields count as errors.",
+  "limitations": "Senzing public development benchmark; previously inspected, not blind or independently unseen. Competitor training overlap unknown. Deepparse has no locality, district or country labels; see shared-field subset.",
+  "models": {
+    "gpu": "gpu-postal int5 experimental.2 (Python reconstruction of release weights)",
+    "libpostal": "libpostal default v1.0.0",
+    "senzing": "libpostal Senzing v1.2",
+    "deepparse": "Deepparse 0.10.0 BPEmb + attention"
+  },
+  "countries": [
+    {
+      "country": "us",
+      "name": "US",
+      "rows": 2233,
+      "gpu": 2128,
+      "libpostal": 2173,
+      "senzing": 2211,
+      "deepparse": 1395,
+      "shared": {
+        "rows": 1993,
+        "gpu": 1905,
+        "libpostal": 1941,
+        "senzing": 1974,
+        "deepparse": 1395
+      },
+      "complete": {
+        "rows": 1427,
+        "gpu": 1421,
+        "libpostal": 1415,
+        "senzing": 1420,
+        "deepparse": 1392
+      },
+      "partial": {
+        "rows": 566,
+        "gpu": 484,
+        "libpostal": 526,
+        "senzing": 554,
+        "deepparse": 3
+      }
+    },
+    {
+      "country": "gb",
+      "name": "UK",
+      "rows": 255,
+      "gpu": 232,
+      "libpostal": 241,
+      "senzing": 244,
+      "deepparse": 0,
+      "shared": {
+        "rows": 173,
+        "gpu": 170,
+        "libpostal": 165,
+        "senzing": 164,
+        "deepparse": 0
+      },
+      "complete": {
+        "rows": 1,
+        "gpu": 0,
+        "libpostal": 0,
+        "senzing": 0,
+        "deepparse": 0
+      },
+      "partial": {
+        "rows": 172,
+        "gpu": 170,
+        "libpostal": 165,
+        "senzing": 164,
+        "deepparse": 0
+      }
+    },
+    {
+      "country": "au",
+      "name": "Australia",
+      "rows": 76,
+      "gpu": 36,
+      "libpostal": 69,
+      "senzing": 76,
+      "deepparse": 1,
+      "shared": {
+        "rows": 7,
+        "gpu": 7,
+        "libpostal": 7,
+        "senzing": 7,
+        "deepparse": 1
+      },
+      "complete": {
+        "rows": 1,
+        "gpu": 1,
+        "libpostal": 1,
+        "senzing": 1,
+        "deepparse": 1
+      },
+      "partial": {
+        "rows": 6,
+        "gpu": 6,
+        "libpostal": 6,
+        "senzing": 6,
+        "deepparse": 0
+      }
+    },
+    {
+      "country": "nz",
+      "name": "New Zealand",
+      "rows": 51,
+      "gpu": 35,
+      "libpostal": 48,
+      "senzing": 51,
+      "deepparse": 0,
+      "shared": {
+        "rows": 2,
+        "gpu": 2,
+        "libpostal": 1,
+        "senzing": 2,
+        "deepparse": 0
+      },
+      "complete": {
+        "rows": 0,
+        "gpu": 0,
+        "libpostal": 0,
+        "senzing": 0,
+        "deepparse": 0
+      },
+      "partial": {
+        "rows": 2,
+        "gpu": 2,
+        "libpostal": 1,
+        "senzing": 2,
+        "deepparse": 0
+      }
+    },
+    {
+      "country": "ca",
+      "name": "Canada",
+      "rows": 432,
+      "gpu": 331,
+      "libpostal": 370,
+      "senzing": 414,
+      "deepparse": 31,
+      "shared": {
+        "rows": 418,
+        "gpu": 329,
+        "libpostal": 365,
+        "senzing": 405,
+        "deepparse": 31
+      },
+      "complete": {
+        "rows": 31,
+        "gpu": 5,
+        "libpostal": 30,
+        "senzing": 30,
+        "deepparse": 30
+      },
+      "partial": {
+        "rows": 387,
+        "gpu": 324,
+        "libpostal": 335,
+        "senzing": 375,
+        "deepparse": 1
+      }
+    },
+    {
+      "country": "ie",
+      "name": "Ireland",
+      "rows": 51,
+      "gpu": 46,
+      "libpostal": 41,
+      "senzing": 49,
+      "deepparse": 0,
+      "shared": {
+        "rows": 37,
+        "gpu": 35,
+        "libpostal": 32,
+        "senzing": 36,
+        "deepparse": 0
+      },
+      "complete": {
+        "rows": 0,
+        "gpu": 0,
+        "libpostal": 0,
+        "senzing": 0,
+        "deepparse": 0
+      },
+      "partial": {
+        "rows": 37,
+        "gpu": 35,
+        "libpostal": 32,
+        "senzing": 36,
+        "deepparse": 0
+      }
+    },
+    {
+      "country": "za",
+      "name": "South Africa",
+      "rows": 53,
+      "gpu": 42,
+      "libpostal": 33,
+      "senzing": 48,
+      "deepparse": 0,
+      "shared": {
+        "rows": 34,
+        "gpu": 27,
+        "libpostal": 21,
+        "senzing": 31,
+        "deepparse": 0
+      },
+      "complete": {
+        "rows": 0,
+        "gpu": 0,
+        "libpostal": 0,
+        "senzing": 0,
+        "deepparse": 0
+      },
+      "partial": {
+        "rows": 34,
+        "gpu": 27,
+        "libpostal": 21,
+        "senzing": 31,
+        "deepparse": 0
+      }
+    }
+  ],
+  "sizes": {
+    "gpu": {
+      "bytes": 78919,
+      "files": [
+        {
+          "file": "model.bin",
+          "sha256": "e97cfb86c5ec703ad70ba684f2f373a44dc9c9e1018e517ab6799e74aa5ce84a",
+          "brotli_bytes": 78919
+        }
+      ]
+    },
+    "deepparse": {
+      "bytes": 178005891,
+      "files": [
+        {
+          "file": "model.safetensors",
+          "sha256": "4d761100d70631a3cb53853a530ad39f5be09cedad0f8c3be0d968bd8accecb5",
+          "brotli_bytes": 64876650
+        },
+        {
+          "file": "multi.wiki.bpe.vs100000.d300.w2v.bin",
+          "sha256": "bb4d89f01e71046895fde0fe954845e3cc91ff888a63f06e6413328de308ad03",
+          "brotli_bytes": 112256285
+        },
+        {
+          "file": "multi.wiki.bpe.vs100000.model",
+          "sha256": "c6064152904900f91e04c97f95e591495f1c601eba70c3a46417f97283c2fdf1",
+          "brotli_bytes": 872956
+        }
+      ]
+    },
+    "senzing": {
+      "bytes": 1255380215,
+      "files": [
+        {
+          "file": "address_dictionary.dat",
+          "sha256": "7baf20bd6f02708566bbd500eb172c308ccfebc2010cd733c9c42c1998232919",
+          "brotli_bytes": 2035087
+        },
+        {
+          "file": "address_parser_crf.dat",
+          "sha256": "6823895f4a8f2c3ec9e33befef02f12507a32572696101c92c684cbbc61c1848",
+          "brotli_bytes": 862995446
+        },
+        {
+          "file": "address_parser_phrases.dat",
+          "sha256": "f601c7a15689214782d9481817cd21c268432b53de72bd3ec2c9f0baf5faef3e",
+          "brotli_bytes": 96191286
+        },
+        {
+          "file": "address_parser_postal_codes.dat",
+          "sha256": "874234e9463e70ac98610dd84ef0d3d137e82a60e241a6f25bd2ed3596761ac6",
+          "brotli_bytes": 138763375
+        },
+        {
+          "file": "language_classifier.dat",
+          "sha256": "f0800eb07610b7ecb771a01b037a4c9ea6eed01668c2e1b863a2202f3db9e13c",
+          "brotli_bytes": 49163334
+        },
+        {
+          "file": "numex.dat",
+          "sha256": "269630109fac796ab576b7fb29a36f3279c0c194e46a9abe91684653bf082a38",
+          "brotli_bytes": 69934
+        },
+        {
+          "file": "transliteration.dat",
+          "sha256": "db75453e1d8a24302be0831304f9bb4792d41ea4e5a5e645c3839ee04763e64c",
+          "brotli_bytes": 6311349
+        },
+        {
+          "file": "address_parser_vocab.trie",
+          "sha256": "01efac50124697e21f0b674e0df8a877bc2a64e1e1235e20f0a3390dfeb78f77",
+          "brotli_bytes": 99850404
+        }
+      ]
+    },
+    "libpostal": {
+      "bytes": 744945131,
+      "files": [
+        {
+          "file": "address_dictionary.dat",
+          "sha256": "9fbf8779942bcc84841ac948ebd0c910b37edc7ff812125f09b6c39018747b1d",
+          "brotli_bytes": 2284365
+        },
+        {
+          "file": "address_parser_crf.dat",
+          "sha256": "e44b308e9e1942efe8ad8226929e29ca49e9ea2900ed36625c601c53509ba5c1",
+          "brotli_bytes": 492638785
+        },
+        {
+          "file": "address_parser_phrases.dat",
+          "sha256": "739643ea06d8c492ba57bd51ba1dc1243853e7f8c6130e3a7bd30150221119e6",
+          "brotli_bytes": 54401752
+        },
+        {
+          "file": "address_parser_postal_codes.dat",
+          "sha256": "7c5b20c541c16758cc73c41025f2327be525831dff272a6b4c3aeb901e481b1b",
+          "brotli_bytes": 99281400
+        },
+        {
+          "file": "language_classifier.dat",
+          "sha256": "f0800eb07610b7ecb771a01b037a4c9ea6eed01668c2e1b863a2202f3db9e13c",
+          "brotli_bytes": 49163334
+        },
+        {
+          "file": "numex.dat",
+          "sha256": "269630109fac796ab576b7fb29a36f3279c0c194e46a9abe91684653bf082a38",
+          "brotli_bytes": 69934
+        },
+        {
+          "file": "transliteration.dat",
+          "sha256": "db75453e1d8a24302be0831304f9bb4792d41ea4e5a5e645c3839ee04763e64c",
+          "brotli_bytes": 6311349
+        },
+        {
+          "file": "address_parser_vocab.trie",
+          "sha256": "962a985f29530440035bd379826f38e35f0f0fc718926444658d89bbd70829b1",
+          "brotli_bytes": 40794212
+        }
+      ]
+    }
+  },
+  "compression": "Brotli quality 5, each asset independently; model/data assets only, excludes code and frameworks. Deepparse includes BPEmb embeddings and tokenizer; libpostal includes parser, dictionaries and language classifier.",
+  "prediction_sha256": {
+    "gpu": "cda1b37304b9c3aeedb13d0baf341e809ca3834295459736e37bb5383deea65c",
+    "libpostal": "368b86880b6072cc51d61fd4cc4fd0dd3a4b6b564745a88742adf820da10da52",
+    "senzing": "d626911937a007539c0c1450a0aa2e298af0d1eb2cb63eeb335a88e5a09caad4",
+    "deepparse": "95362ec3d9b3f71b6d245ffb51fa6d51e4056e29dde488c23ec8ec37baf3a64e"
+  }
+}
