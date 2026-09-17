@@ -26,7 +26,7 @@ export const PALETTE: Record<DitherColor, Seed> = {
     line: [200, 175, 255],
     star: [225, 210, 255],
   },
-  pink: { fill: [240, 90, 190], line: [255, 170, 220], star: [255, 205, 235] },
+  pink: { fill: [217, 160, 174], line: [255, 170, 220], star: [255, 205, 235] },
   orange: {
     fill: [223, 188, 130],
     line: [255, 195, 130],

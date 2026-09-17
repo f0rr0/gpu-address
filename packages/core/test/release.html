@@ -55,7 +55,7 @@ try {
     '6': '163868e5de943fbbda0f43e718cd70ee48fd21da391d1c3de9b589f7f64fb2b8',
     '5': 'e97cfb86c5ec703ad70ba684f2f373a44dc9c9e1018e517ab6799e74aa5ce84a',
   };
-  assert(modelSha256 === expectedHashes[bits || '5'], 'Wrong model');
+  assert(modelSha256 === (bits ? expectedHashes[bits] : '06a212f708a52c32e099c15e384e3bd149885c01d06c4b00343cc3b7ad894b60'), 'Wrong model');
   const base = '/data/geosearch-sample-20260916/';
   const records = await json(base + 'inputs.json');
   const baseline = await json(base + 'ours12-predictions.json');

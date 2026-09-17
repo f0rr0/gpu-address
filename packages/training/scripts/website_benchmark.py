@@ -224,7 +224,9 @@ def report(rows):
         eligible = set(field_tokens(row["components"])) <= supported
         if eligible:
             shared[c]["rows"] += 1
-            cohort = complete[c] if set(field_tokens(row["components"])) == supported else partial[c]
+            cohort = (
+                complete[c] if set(field_tokens(row["components"])) == supported else partial[c]
+            )
             cohort["rows"] += 1
         for m in models:
             correct = field_exact(predictions[m][row["id"]], row["components"])
@@ -243,9 +245,14 @@ def report(rows):
             deepparse="Deepparse 0.10.0 BPEmb + attention",
         ),
         countries=[
-            dict(country=c, name=name, **groups[c], shared=dict(shared[c]),
-                 complete={k: complete[c][k] for k in ("rows", *models)},
-                 partial={k: partial[c][k] for k in ("rows", *models)})
+            dict(
+                country=c,
+                name=name,
+                **groups[c],
+                shared=dict(shared[c]),
+                complete={k: complete[c][k] for k in ("rows", *models)},
+                partial={k: partial[c][k] for k in ("rows", *models)},
+            )
             for c, name in COUNTRIES.items()
         ],
         sizes=json.loads((OUT / "sizes.json").read_text()),

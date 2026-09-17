@@ -134,3 +134,30 @@ comparator asset hashes and execution code hashes.
   Public registered-office address fields are included; the separate CompanyName
   column and officer records are not included. Source address fields can contain
   organization or care-of names. Do not treat third-party source data as MIT code.
+
+## US-only usaddress supplement
+
+usaddress 0.5.16 was added after the original four-parser evaluation, using exactly
+the same 842 frozen US inputs. It is not evaluated on the UK cohort. No fitting,
+input edits, or sample selection were performed. Its training overlap is unknown.
+
+The default `usaddress.parse` output maps PlaceName to city, StateName to state,
+ZipCode to postcode, and street/building/recipient/box tokens to the address block.
+NotAddress remains an unrecognized field, so it cannot silently earn credit.
+Every returned token is retained; tokenizer omissions count under the existing
+exact-field scoring rule. Original labels are preserved in `usaddress.json`.
+
+`usaddress-results.json` contains scores, dependency versions, input and prediction
+hashes, the full label mapping, and the model file hash. Its 133,768-byte
+`usaddr.crfsuite` compresses to 53,853 bytes with Brotli quality 5. Python,
+CRFsuite and feature-extraction code are excluded, as runtime code is excluded
+for every parser. The gpu-postal model measures 78,919 bytes under that setting.
+This compares model assets for US parsing, not equivalent output granularity or
+total application download size.
+
+Reproduce from the repository root:
+
+```sh
+uv run --with usaddress==0.5.16 --with brotli==1.2.0 python packages/training/scripts/usaddress_benchmark.py
+uv run python packages/training/scripts/verify_external_benchmark.py --directory evaluation-v4
+```

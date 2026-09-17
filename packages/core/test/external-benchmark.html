@@ -8,10 +8,11 @@ import { createParser } from '../dist/index.js';
 const output = document.querySelector('#result');
 let parser;
 try {
-  const dataset = new URLSearchParams(location.search).get('dataset') || 'evaluation-v4';
-  if (!['evaluation', 'evaluation-v3', 'evaluation-v4'].includes(dataset)) throw new Error('Unknown dataset');
+  const dataset = new URLSearchParams(location.search).get('dataset') || 'evaluation-us-v1';
+  if (!['evaluation', 'evaluation-v3', 'evaluation-v4', 'evaluation-us-v1'].includes(dataset)) throw new Error('Unknown dataset');
   const base = `/apps/website/public/${dataset}/`;
-  const [rows, expected, manifest] = await Promise.all(['inputs.json', 'gpu.json', 'manifest.json']
+  const files = dataset === 'evaluation-us-v1' ? ['nad-inputs.json', 'nad-gpu.json', 'results.json'] : ['inputs.json', 'gpu.json', 'manifest.json'];
+  const [rows, expected, manifest] = await Promise.all(files
     .map(path => fetch(base + path).then(r => { if (!r.ok) throw new Error(path); return r.json(); })));
   const bytes = await fetch('../model.bin').then(r => r.arrayBuffer());
   const hash = [...new Uint8Array(await crypto.subtle.digest('SHA-256', bytes))].map(x => x.toString(16).padStart(2, '0')).join('');
@@ -29,7 +30,7 @@ try {
     if (i % 100 === 0) output.textContent = `${i} / ${rows.length}`;
   }
   output.textContent = JSON.stringify({status: differences.length ? 'failed' : 'passed',
-    rows: rows.length, differences, modelSha256: hash, inputsSha256: manifest.inputs_sha256,
+    rows: rows.length, differences, modelSha256: hash, inputsSha256: manifest.inputs_sha256 ?? manifest.hashes['nad-inputs.json'],
     browser: navigator.userAgent, checkedAt: new Date().toISOString()}, null, 2);
 } catch (error) {
   output.textContent = JSON.stringify({status: 'failed', error: String(error)});

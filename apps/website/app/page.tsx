@@ -3,9 +3,9 @@ import { ParserDemo } from "@/components/parser-demo";
 import { UsageCode } from "@/components/usage-code";
 import { CopyButton } from "@/components/copy-button";
 import { DitherGradient } from "@/components/dither-kit/gradient";
-import { SizeComparison, CountryComparison } from "@/components/comparisons";
+import { SizeComparison, CountryComparison, RobustnessComparison } from "@/components/comparisons";
 import benchmarks from "@/public/benchmarks.json";
-import evaluation from "@/public/evaluation-v4/results.json";
+import evaluation from "@/public/evaluation-us-v1/results.json";
 
 const repo = "https://github.com/f0rr0/gpu-postal";
 const code = `import { createParser } from 'gpu-postal';
@@ -63,8 +63,9 @@ export default function Page() {
           </h1>
           <p className="mt-4 text-base leading-6 text-pretty">
             Labels US address components in context. Runs locally with a
-            tiny WebGPU model.
+            tiny WebGPU model. Full, partial or out of order.
           </p>
+          <p className="mt-3 font-mono text-xs text-muted-foreground">58.7 kB model + runtime (Brotli) · 5.2 ms warm median on M1 Pro</p>
           <div className="relative mt-8 h-4" aria-hidden="true">
             <DitherGradient
               from="white"
@@ -115,10 +116,9 @@ export default function Page() {
             calls.
           </p>
         </section>
-        <SizeComparison sizes={benchmarks.sizes} />
-        <CountryComparison
-          groups={evaluation.groups}
-        />
+        <SizeComparison sizes={{ ...benchmarks.sizes, ...evaluation.sizes }} />
+        <CountryComparison groups={[evaluation.nad]} />
+        <RobustnessComparison cohorts={evaluation.diagnostics} />
       </main>
       <footer className="mx-auto w-full max-w-192 px-4 sm:px-8 lg:px-12">
         <div className="flex flex-wrap justify-between gap-4 border-t border-dotted border-muted-foreground/70 pt-6 pb-10 text-xs text-muted-foreground [&_a]:inline-block">

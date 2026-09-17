@@ -9,15 +9,17 @@ import { YAxis } from "./dither-kit/y-axis";
 import { Grid } from "./dither-kit/grid";
 import { Tooltip } from "./dither-kit/tooltip";
 
-const models = ["gpu", "libpostal", "senzing", "deepparse"] as const;
+const models = ["gpu", "usaddress", "libpostal", "senzing", "deepparse"] as const;
 const labels = {
   gpu: "gpu-postal",
+  usaddress: "usaddress",
   libpostal: "libpostal",
   senzing: "Senzing",
   deepparse: "Deepparse",
 };
 const config = {
   gpu: { label: "gpu-postal", color: "green" },
+  usaddress: { label: "usaddress 0.5.16", color: "pink" },
   libpostal: { label: "libpostal default", color: "blue" },
   senzing: { label: "Senzing v1.2", color: "orange" },
   deepparse: { label: "Deepparse BPEmb + attention", color: "purple" },
@@ -39,25 +41,26 @@ export function SizeComparison({
 }: {
   sizes: Record<string, { bytes: number }>;
 }) {
-  const max = Math.max(...models.map((model) => sizes[model].bytes));
+  const sizeModels = ["gpu", "usaddress"] as const;
+  const max = Math.max(...sizeModels.map((model) => sizes[model].bytes));
   return (
     <section
       className="border-y border-dotted border-muted-foreground/70 py-8"
       aria-labelledby="size-title"
     >
       <h2 className="font-serif text-2xl leading-tight font-normal text-balance" id="size-title">
-        Compressed model &amp; data
+        Two small US parsers
       </h2>
       <p className="mt-2 text-sm leading-relaxed text-pretty text-muted-foreground">
-        Brotli quality 5 · Runtime excluded · Language and feature coverage differ
+        Model weights (Brotli quality 11) · Runtime excluded for both
       </p>
       <div className="mt-6 grid gap-4" aria-label="Model sizes, linear scale">
-        {models.map((model) => (
+        {sizeModels.map((model) => (
           <div key={model}>
             <div className="mb-1 flex items-baseline justify-between gap-4 text-xs">
               <span>{labels[model]}</span>
               <span className="tabular-nums">
-                {sizeText(sizes[model].bytes)}
+                {sizeText(sizes[model].bytes)} (Brotli)
               </span>
             </div>
             <div className="relative h-6 border-b border-border">
@@ -76,11 +79,24 @@ export function SizeComparison({
         ))}
       </div>
       <p className="mt-3 text-xs leading-5 text-muted-foreground">
-        Linear scale; gpu-postal is smaller than one pixel.{" "}
-        <a className="underline" href="/benchmarks.json">
+        Linear scale. gpu-postal includes its browser runtime in 58.7 kB (Brotli).
+        usaddress additionally requires Python, CRFsuite and feature-extraction code; those are not included above.{" "}
+        <a className="underline" href="/evaluation-us-v1/results.json">
           Measurement data
         </a>
       </p>
+      <details className="group/disclosure mt-4">
+        <summary className="flex w-fit cursor-pointer list-none items-center gap-2 text-xs text-muted-foreground hover:text-foreground [&::-webkit-details-marker]:hidden">
+          <ChevronRight aria-hidden="true" className="size-3.5 transition-transform group-open/disclosure:rotate-90" />
+          Multilingual models
+        </summary>
+        <p className="mt-3 text-xs leading-5 text-muted-foreground">
+          libpostal {sizeText(sizes.libpostal.bytes)} (Brotli) · Senzing {sizeText(sizes.senzing.bytes)} (Brotli) · Deepparse {sizeText(sizes.deepparse.bytes)} (Brotli).
+          {" "}These historical measurements use Brotli quality 5, not the quality 11 comparison above.
+          {" "}Includes broader language and feature coverage.{" "}
+          <a className="underline" href="/benchmarks.json">Asset inventory</a>
+        </p>
+      </details>
     </section>
   );
 }
@@ -133,7 +149,7 @@ export function CountryComparison({ groups }: { groups: EvaluationGroup[] }) {
         {models.map((m) => (
           <span key={m} className="flex items-center gap-2">
             <i aria-hidden="true" data-model={m}
-              className="size-2 shrink-0 bg-[repeating-conic-gradient(var(--chart-1)_0_25%,transparent_0_50%)] bg-size-[4px_4px] data-[model=libpostal]:bg-[repeating-linear-gradient(45deg,var(--chart-2)_0_1px,transparent_1px_3px)] data-[model=senzing]:bg-linear-to-t data-[model=senzing]:from-chart-3 data-[model=senzing]:to-transparent data-[model=deepparse]:bg-chart-4 data-[model=deepparse]:bg-none" />
+              className="size-2 shrink-0 bg-[repeating-conic-gradient(var(--chart-1)_0_25%,transparent_0_50%)] bg-size-[4px_4px] data-[model=usaddress]:bg-[repeating-conic-gradient(var(--chart-5)_0_25%,transparent_0_50%)] data-[model=libpostal]:bg-[repeating-linear-gradient(45deg,var(--chart-2)_0_1px,transparent_1px_3px)] data-[model=senzing]:bg-linear-to-t data-[model=senzing]:from-chart-3 data-[model=senzing]:to-transparent data-[model=deepparse]:bg-chart-4 data-[model=deepparse]:bg-none" />
             {labels[m]}
           </span>
         ))}
@@ -141,7 +157,7 @@ export function CountryComparison({ groups }: { groups: EvaluationGroup[] }) {
       <div className="h-65" role="img" aria-label="US whole-address exact-match comparison; numerical results below">
         <BarChart data={rows.map((r) => ({ name: "US", ...Object.fromEntries(models.map((m) => [m, r.models[m].percent])) }))} config={config} animate={false} bloom="off">
           <Grid /><XAxis dataKey="name" /><YAxis tickFormatter={(v) => `${v}%`} />
-          {models.map((m, i) => <Bar key={m} dataKey={m} variant={(["dotted", "hatched", "gradient", "solid"] as const)[i]} />)}
+          {models.map((m, i) => <Bar key={m} dataKey={m} variant={(["dotted", "dotted", "hatched", "gradient", "solid"] as const)[i]} />)}
           <Tooltip labelKey="name" valueFormatter={(v) => `${v.toFixed(1)}%`} />
         </BarChart>
       </div>
@@ -172,12 +188,72 @@ export function CountryComparison({ groups }: { groups: EvaluationGroup[] }) {
         </summary>
         <div className="mt-4 grid gap-3 text-xs leading-5 text-muted-foreground [&_a]:underline">
           <p>842 addresses across 40 states from the <a href="https://www.transportation.gov/gis/national-address-database">US National Address Database <ArrowUpRight aria-hidden="true" className="inline-block size-3.5 align-text-bottom" /></a>, including 118 with subaddresses. Author-run, structured-address sample; not population-representative. No partial-address cohort in this benchmark.</p>
-          <p>gpu-postal experimental.2, libpostal default, Senzing v1.2 and Deepparse BPEmb + attention. Same frozen inputs for every parser, with training-overlap checks. No model was trained for this test.</p>
+          <p>gpu-postal experimental.3, usaddress 0.5.16, libpostal default, Senzing v1.2 and Deepparse BPEmb + attention. The current gpu-postal model was rerun on the frozen inputs; other parsers’ predictions are retained from the original evaluation. This is not a newly blind test. Training overlap with the expanded US corpus and competitors is unknown.</p>
           <p>Scored fields: address block, city, state and ZIP code. Localities join the address block; districts join the state. Case, commas and whitespace are ignored; other punctuation and repeated tokens count. Extra fields are errors.</p>
           <p>Source labels may contain mistakes. Confidence intervals describe this sample; competitor training overlap is unknown. The downloadable evidence retains the full original evaluation.</p>
-          <p className="flex flex-wrap gap-x-4 gap-y-2"><a href="/evaluation-v4/README.md">Protocol &amp; reproduction</a><a href="/evaluation-v4/inputs.json">Labeled inputs</a><a href="/evaluation-v4/results.json">Scores &amp; hashes</a><a href="/evaluation-v4/browser-parity.json">WebGPU verification</a></p>
+          <p className="flex flex-wrap gap-x-4 gap-y-2"><a href="/evaluation-us-v1/README.md">Protocol &amp; reproduction</a><a href="/evaluation-us-v1/results.json">Scores, sizes &amp; hashes</a><a href="/evaluation-us-v1/nad-inputs.json">Labeled inputs</a><a href="/evaluation-us-v1/nad-gpu.json">gpu-postal predictions</a><a href="/evaluation-v4/usaddress.json">usaddress predictions</a><a href="/evaluation-us-v1/nad-browser-parity.json">WebGPU verification</a></p>
         </div>
       </details>
+    </section>
+  );
+}
+
+const diagnosticLabels: Record<string, string> = {
+  complete: "Complete",
+  shuffled: "Shuffled",
+  partial: "Partial",
+  "partial-shuffled": "Partial + shuffled",
+  singleton: "Single field",
+  "lowercase-no-commas": "Lowercase, no commas",
+  "uppercase-multiline": "Uppercase, multiline",
+  "typo-street": "Street-name typo",
+  "typo-city": "City-name typo",
+  "messy-partial-shuffled": "Messy + partial + shuffled",
+  "building-prefix": "Building prefix",
+  "unit-first": "Unit first",
+  "natural-us50": "Historical US50 sample",
+};
+
+export function RobustnessComparison({ cohorts }: {
+  cohorts: Record<string, { rows: number; gpu: number; usaddress: number }>;
+}) {
+  const highlighted = ["shuffled", "partial", "partial-shuffled"];
+  return (
+    <section className="border-t border-dotted border-muted-foreground/70 py-12" aria-labelledby="robustness-title">
+      <h2 id="robustness-title" className="font-serif text-2xl leading-tight font-normal text-balance">When the order changes</h2>
+      <p className="mt-2 text-sm leading-relaxed text-pretty text-muted-foreground">
+        The same address facts, with fields shuffled or removed. gpu-postal keeps more of these inputs intact; usaddress leads on conventional building and unit formats.
+      </p>
+      <p className="mt-3 text-xs leading-5 text-muted-foreground">
+        Synthetic variants of 20 public institutional addresses—not hundreds of independent addresses. All seven fields must match; locality is not merged into street.
+      </p>
+      <div className="my-6 flex gap-5 text-xs"><span className="text-chart-1">gpu-postal int5</span><span className="text-chart-5">usaddress 0.5.16</span></div>
+      <div className="h-65" role="img" aria-label="Shuffled and partial address comparison; all numerical results follow">
+        <BarChart data={highlighted.map(key => ({ name: diagnosticLabels[key], gpu: 100 * cohorts[key].gpu / cohorts[key].rows, usaddress: 100 * cohorts[key].usaddress / cohorts[key].rows }))} config={{ gpu: config.gpu, usaddress: config.usaddress }} animate={false} bloom="off">
+          <Grid /><XAxis dataKey="name" /><YAxis tickFormatter={v => `${v}%`} />
+          <Bar dataKey="gpu" variant="dotted" /><Bar dataKey="usaddress" variant="hatched" />
+          <Tooltip labelKey="name" valueFormatter={v => `${v.toFixed(1)}%`} />
+        </BarChart>
+      </div>
+      <div className="mt-6 overflow-x-auto">
+        <table className="w-full text-xs tabular-nums">
+          <caption className="pb-3 text-left text-muted-foreground">Whole-input field match · Correct / cases</caption>
+          <thead><tr><th scope="col" className="border-b border-border py-3 text-left font-normal">Input</th><th scope="col" className="border-b border-border py-3 text-right font-normal">gpu-postal</th><th scope="col" className="border-b border-border py-3 text-right font-normal">usaddress</th></tr></thead>
+          <tbody>{Object.entries(diagnosticLabels).map(([key, label]) => (
+            <tr key={key}>
+              <th scope="row" className="border-b border-border py-3 pr-2 text-left font-normal">{label}</th>
+              {(["gpu", "usaddress"] as const).map(model => <td key={model} className="border-b border-border py-3 pl-2 text-right">{(100 * cohorts[key][model] / cohorts[key].rows).toFixed(1)}%<span className="mt-1 block text-muted-foreground">{cohorts[key][model]} / {cohorts[key].rows}</span></td>)}
+            </tr>
+          ))}</tbody>
+        </table>
+      </div>
+      <p className="mt-4 text-xs leading-5 text-muted-foreground">
+        On the full 680-address upstream usaddress US50 test, shared coarse-field matches are 675/680 (99.26%) for gpu-postal and 678/680 (99.71%) for usaddress. That scorer merges locality into street and district into state; it differs from the table above. There are 16 exact matches with our training corpus, and competitor exposure is unknown.
+      </p>
+      <p className="mt-3 text-xs leading-5 text-muted-foreground">
+        Case, commas and whitespace are ignored. The institutional labels were authored before pilot inference; these cases were inspected during development. No pooled accuracy or confidence interval is claimed for correlated variants.{" "}
+        <a className="underline" href="/evaluation-us-v1/diagnostic-predictions.json">Every input and both predictions</a>{" · "}<a className="underline" href="/evaluation-us-v1/README.md">Method and sources</a>
+      </p>
     </section>
   );
 }

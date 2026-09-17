@@ -18,7 +18,7 @@
     "d3-scale": "^4.0.2",
     "d3-shape": "^3.2.0",
     "gpu-lexer": "^0.0.3",
-    "gpu-postal": "0.1.0-experimental.2",
+    "gpu-postal": "0.1.0-experimental.3",
     "lucide-react": "^1.46.0",
     "motion": "^13.4.0",
     "next": "^16.3.5",

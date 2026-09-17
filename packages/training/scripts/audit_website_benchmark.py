@@ -38,7 +38,10 @@ def fields(parts):
 def main():
     rows = json.loads((DATA / "inputs.json").read_text())
     published = json.loads((ROOT / "apps/website/public/benchmarks.json").read_text())
-    assert hashlib.sha256((DATA / "source.csv").read_bytes()).hexdigest() == published["source"]["sha256"]
+    assert (
+        hashlib.sha256((DATA / "source.csv").read_bytes()).hexdigest()
+        == published["source"]["sha256"]
+    )
     gold = {r["id"]: fields(r["components"]) for r in rows}
     correct = {}
     for model in MODELS:
@@ -51,12 +54,19 @@ def main():
     for country in [None, *[c["country"] for c in published["countries"]]]:
         candidates = [r for r in rows if country is None or r["country"] == country]
         for scope in ("all", "shared", "complete", "partial_shared"):
-            selected = [r for r in candidates if (
-                scope == "all"
-                or scope == "shared" and set(gold[r["id"]]) <= SHARED
-                or scope == "complete" and set(gold[r["id"]]) == SHARED
-                or scope == "partial_shared" and set(gold[r["id"]]) < SHARED
-            )]
+            selected = [
+                r
+                for r in candidates
+                if (
+                    scope == "all"
+                    or scope == "shared"
+                    and set(gold[r["id"]]) <= SHARED
+                    or scope == "complete"
+                    and set(gold[r["id"]]) == SHARED
+                    or scope == "partial_shared"
+                    and set(gold[r["id"]]) < SHARED
+                )
+            ]
             counts = {m: sum(correct[m][r["id"]] for r in selected) for m in MODELS}
             if country:
                 expected = next(c for c in published["countries"] if c["country"] == country)

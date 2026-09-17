@@ -1,0 +1,13 @@
+{
+  "browser": "Chrome/153.0.0.0",
+  "adapter": {"vendor": "apple", "architecture": "metal-3", "isFallbackAdapter": false},
+  "models": {
+    "release": {"setupMs": 49.699999928474426, "parity": 931, "mismatches": [], "warm": {"n": 400, "medianMs": 5.100000023841858, "p95Ms": 9.5}},
+    "candidate": {"setupMs": 39.699999928474426, "parity": 931, "mismatches": [], "warm": {"n": 400, "medianMs": 5.199999928474426, "p95Ms": 8.899999976158142}}
+  },
+  "status": "passed",
+  "cases": 931,
+  "timingScope": "Same page, same inputs, alternating four rounds; GPU numerical parity is separate from address accuracy",
+  "runtime_tests": {"passed": 6, "gpu_failure_testing": "mocked device-loss, active and queued parse rejection, initialization cleanup"},
+  "contracts": ["UTF-16 spans", "gap/newline/reordered inputs", "empty input", "disposed parser rejection", "idempotent disposal"]
+}

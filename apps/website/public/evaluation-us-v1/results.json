@@ -1,0 +1,359 @@
+{
+  "release": "0.1.0-experimental.3",
+  "checkpoint_epoch": 20,
+  "model_sha256": "06a212f708a52c32e099c15e384e3bd149885c01d06c4b00343cc3b7ad894b60",
+  "checkpoint_sha256": "0c294a7ae4ddfce5e0305bf5516c496ae2b30ceca0f37bc3b05f60895aa9dacd",
+  "nad": {
+    "country": "us",
+    "cohort": "complete",
+    "rows": 842,
+    "models": {
+      "gpu": {
+        "correct": 828,
+        "percent": 98.3372921615202,
+        "interval": [
+          97.22851225569455,
+          99.00701646087029
+        ],
+        "field_f1": 99.24231169217056,
+        "fields": {
+          "postcode": {
+            "rows": 842,
+            "predicted": 842,
+            "correct": 839,
+            "f1": 99.6437054631829
+          },
+          "street_address": {
+            "rows": 842,
+            "predicted": 842,
+            "correct": 836,
+            "f1": 99.2874109263658
+          },
+          "city": {
+            "rows": 842,
+            "predicted": 837,
+            "correct": 831,
+            "f1": 98.98749255509232
+          },
+          "state": {
+            "rows": 842,
+            "predicted": 842,
+            "correct": 834,
+            "f1": 99.04988123515439
+          }
+        }
+      },
+      "usaddress": {
+        "correct": 831,
+        "percent": 98.6935866983373,
+        "interval": [
+          97.67590279168668,
+          99.26897871640077
+        ],
+        "field_f1": 99.43586698337292,
+        "fields": {
+          "postcode": {
+            "rows": 842,
+            "predicted": 842,
+            "correct": 842,
+            "f1": 100.0
+          },
+          "street_address": {
+            "rows": 842,
+            "predicted": 842,
+            "correct": 831,
+            "f1": 98.6935866983373
+          },
+          "city": {
+            "rows": 842,
+            "predicted": 842,
+            "correct": 834,
+            "f1": 99.04988123515439
+          },
+          "state": {
+            "rows": 842,
+            "predicted": 842,
+            "correct": 842,
+            "f1": 100.0
+          }
+        }
+      },
+      "libpostal": {
+        "correct": 824,
+        "percent": 97.86223277909738,
+        "interval": [
+          96.64617374722589,
+          98.64355124730885
+        ],
+        "field_f1": 99.00460555638092,
+        "fields": {
+          "postcode": {
+            "rows": 842,
+            "predicted": 842,
+            "correct": 838,
+            "f1": 99.5249406175772
+          },
+          "street_address": {
+            "rows": 842,
+            "predicted": 842,
+            "correct": 829,
+            "f1": 98.45605700712589
+          },
+          "city": {
+            "rows": 842,
+            "predicted": 837,
+            "correct": 828,
+            "f1": 98.63013698630137
+          },
+          "state": {
+            "rows": 842,
+            "predicted": 842,
+            "correct": 837,
+            "f1": 99.40617577197149
+          }
+        }
+      },
+      "senzing": {
+        "correct": 829,
+        "percent": 98.45605700712589,
+        "interval": [
+          97.376456240646,
+          99.09552340642638
+        ],
+        "field_f1": 99.34640522875817,
+        "fields": {
+          "postcode": {
+            "rows": 842,
+            "predicted": 842,
+            "correct": 842,
+            "f1": 100.0
+          },
+          "street_address": {
+            "rows": 842,
+            "predicted": 842,
+            "correct": 833,
+            "f1": 98.93111638954869
+          },
+          "city": {
+            "rows": 842,
+            "predicted": 838,
+            "correct": 831,
+            "f1": 98.92857142857143
+          },
+          "state": {
+            "rows": 842,
+            "predicted": 842,
+            "correct": 838,
+            "f1": 99.5249406175772
+          }
+        }
+      },
+      "deepparse": {
+        "correct": 815,
+        "percent": 96.79334916864607,
+        "interval": [
+          95.37468629566376,
+          97.7869803243032
+        ],
+        "field_f1": 98.39667458432304,
+        "fields": {
+          "postcode": {
+            "rows": 842,
+            "predicted": 842,
+            "correct": 842,
+            "f1": 100.0
+          },
+          "street_address": {
+            "rows": 842,
+            "predicted": 842,
+            "correct": 815,
+            "f1": 96.79334916864607
+          },
+          "city": {
+            "rows": 842,
+            "predicted": 842,
+            "correct": 815,
+            "f1": 96.79334916864607
+          },
+          "state": {
+            "rows": 842,
+            "predicted": 842,
+            "correct": 842,
+            "f1": 100.0
+          }
+        }
+      }
+    }
+  },
+  "diagnostics": {
+    "complete": {
+      "rows": 20,
+      "gpu": 17,
+      "usaddress": 19
+    },
+    "shuffled": {
+      "rows": 460,
+      "gpu": 368,
+      "usaddress": 24
+    },
+    "singleton": {
+      "rows": 80,
+      "gpu": 68,
+      "usaddress": 53
+    },
+    "partial": {
+      "rows": 200,
+      "gpu": 163,
+      "usaddress": 156
+    },
+    "partial-shuffled": {
+      "rows": 200,
+      "gpu": 157,
+      "usaddress": 8
+    },
+    "lowercase-no-commas": {
+      "rows": 20,
+      "gpu": 14,
+      "usaddress": 19
+    },
+    "uppercase-multiline": {
+      "rows": 20,
+      "gpu": 17,
+      "usaddress": 19
+    },
+    "typo-street": {
+      "rows": 20,
+      "gpu": 17,
+      "usaddress": 19
+    },
+    "typo-city": {
+      "rows": 20,
+      "gpu": 17,
+      "usaddress": 19
+    },
+    "messy-partial-shuffled": {
+      "rows": 20,
+      "gpu": 10,
+      "usaddress": 0
+    },
+    "building-prefix": {
+      "rows": 16,
+      "gpu": 2,
+      "usaddress": 15
+    },
+    "unit-first": {
+      "rows": 5,
+      "gpu": 4,
+      "usaddress": 5
+    },
+    "natural-us50": {
+      "rows": 100,
+      "gpu": 95,
+      "usaddress": 99
+    }
+  },
+  "us50": {
+    "rows": 680,
+    "sha256": "6ff52e6f3abf892fecb2a449a05853c05c1780cc31c924762ac82c37832dabd3",
+    "gpu_postal": {
+      "correct": 675,
+      "percent": 99.26470588235294,
+      "interval": [
+        98.29039652310107,
+        99.68552923539801
+      ],
+      "field_f1": 99.68430826369546,
+      "fields": {
+        "city": {
+          "rows": 680,
+          "predicted": 678,
+          "correct": 676,
+          "f1": 99.55817378497791
+        },
+        "postcode": {
+          "rows": 680,
+          "predicted": 680,
+          "correct": 680,
+          "f1": 100.0
+        },
+        "state": {
+          "rows": 680,
+          "predicted": 680,
+          "correct": 678,
+          "f1": 99.70588235294117
+        },
+        "street_address": {
+          "rows": 654,
+          "predicted": 653,
+          "correct": 650,
+          "f1": 99.46442234123948
+        }
+      }
+    },
+    "usaddress": {
+      "correct": 678,
+      "percent": 99.70588235294117,
+      "interval": [
+        98.93401686558425,
+        99.9193052429909
+      ],
+      "field_f1": 99.94433104472073,
+      "fields": {
+        "city": {
+          "rows": 680,
+          "predicted": 680,
+          "correct": 680,
+          "f1": 100.0
+        },
+        "postcode": {
+          "rows": 680,
+          "predicted": 680,
+          "correct": 680,
+          "f1": 100.0
+        },
+        "state": {
+          "rows": 680,
+          "predicted": 680,
+          "correct": 680,
+          "f1": 100.0
+        },
+        "street_address": {
+          "rows": 654,
+          "predicted": 654,
+          "correct": 653,
+          "f1": 99.84709480122324
+        },
+        "unrecognized": {
+          "rows": 0,
+          "predicted": 1,
+          "correct": 0,
+          "f1": 0.0
+        }
+      }
+    }
+  },
+  "sizes": {
+    "gpu": {
+      "bytes": 53353,
+      "sha256": "06a212f708a52c32e099c15e384e3bd149885c01d06c4b00343cc3b7ad894b60"
+    },
+    "usaddress": {
+      "bytes": 50189,
+      "sha256": "37ea2e93ece3b9340b4da455839ded8bb11a6c6ecaccfc3c8f80ed922f5065d9"
+    }
+  },
+  "runtime_brotli": 5334,
+  "model_and_runtime_brotli": 58687,
+  "compression": "Brotli quality 11, each file separately. Size chart excludes runtimes for both models; usaddress requires Python, CRFsuite and feature extraction.",
+  "nad_method": "Same frozen v4 US NAD inputs, current int5 predictions, cached competitors. Four-field token multisets: locality joins street, district joins state. Training overlap with the expanded US corpus and competitors is unknown; not a newly blind benchmark.",
+  "diagnostic_method": "Seven-field token multisets, no locality/district merging; case, commas and whitespace ignored. Derived presentations share 20 official-source institutional addresses. Labels authored before pilot inference. Not independent traffic samples or population accuracy. Historical US50 sample is separate.",
+  "us50_method": "Historical usaddress upstream test; coarse-field mapping; 16 exact training overlaps. Entity and competitor exposure unknown.",
+  "prior_comparators": "/evaluation-v4/",
+  "hashes": {
+    "browser-parity.json": "6a1b5b2f8ce6c3da7a30a08d4f1dd5c9e5121cb865109240a8862d74804cd736",
+    "diagnostic-predictions.json": "6ff814b262e2ad5a9d104b9edd685cbf2dd3380e90a39ea091c7f6d335bfe46b",
+    "nad-browser-parity.json": "26d11f212a1e7e12ca11117a3a6d169890974d4ae16de2a3e53cea6941397b08",
+    "nad-gpu.json": "dfb4a0327121730369afa373d8964313a5dab61b2c3a456e5bb29559c26fcc61",
+    "nad-inputs.json": "8d10d8040faa5441b5c707ed0c4ed021e0971d3c8edbab4590327e981b7e038f"
+  }
+}

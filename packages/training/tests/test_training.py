@@ -156,3 +156,125 @@ def test_training_stops_on_validation_plateau(tmp_path, monkeypatch):
     assert completed["stop_reason"] == "validation-plateau" and completed["epochs"] == 3
     assert torch.load(run / "best.pt", weights_only=False)["epoch"] == 1
     assert json.loads((run / "epoch-3.json").read_text())["learning_rate"] == 0.0005
+
+
+def test_robustness_selection_uses_country_macros_and_clean_guards():
+    def panel(exact, rows=200):
+        return {"countries": {"gb": {"exact": exact, "rows": rows}}}
+
+    baseline = {
+        "clean": panel(180),
+        "old-us": panel(180),
+        "new-us": panel(180),
+        "partial": panel(100),
+        "reordered": panel(100),
+        "combined": panel(100),
+    }
+    candidate = {
+        "clean": panel(179),
+        "old-us": panel(178),
+        "new-us": panel(178),
+        "partial": panel(120),
+        "reordered": panel(140),
+        "combined": panel(160),
+    }
+    score, clean, eligible, failures = training.robustness_selection(candidate, baseline)
+    assert score == pytest.approx(0.7)
+    assert clean == 0.895 and eligible and failures == []
+    candidate["new-us"] = panel(177)
+    assert training.robustness_selection(candidate, baseline)[2:] == (
+        False,
+        ["new-us-gb-exact"],
+    )
+
+
+def test_locked_robustness_training_writes_int5_panel_provenance(tmp_path, monkeypatch):
+    data = tmp_path / "data"
+    data.mkdir()
+    countries = ("us", "gb", "au", "nz", "ca", "ie", "za")
+    rows = []
+    for country in countries:
+        row = tagged("en\tgb\t12/house_number Main/road Street/road |/FSEP London/city")
+        row.update(id=f"robust-{country}", country=country)
+        rows.append(row)
+    write_rows(data / "train.jsonl.gz", rows)
+    for name, filename in training.ROBUST_PANELS.items():
+        write_rows(data / filename, [rows[0]] if name in {"old-us", "new-us"} else rows)
+    (data / "manifest.json").write_text(
+        json.dumps({"split_countries": {"train": dict.fromkeys(countries, 1)}})
+    )
+    empty_baseline = {
+        name: {
+            "countries": {
+                country: {"exact": 0, "rows": 1}
+                for country in (("us",) if name in {"old-us", "new-us"} else countries)
+            }
+        }
+        for name in training.ROBUST_PANELS
+    }
+    (data / "baseline-int5.json").write_text(json.dumps(empty_baseline))
+    (data / "augmentation-conflicts.json").write_text("[]")
+    real_serialize = training.serialize
+    quantization_checks = []
+
+    def checked_serialize(model, **kwargs):
+        before = {name: value.detach().clone() for name, value in model.state_dict().items()}
+        serialized = real_serialize(model, **kwargs)
+        quantization_checks.append(
+            all(torch.equal(before[name], value) for name, value in model.state_dict().items())
+        )
+        return serialized
+
+    monkeypatch.setattr(training, "serialize", checked_serialize)
+    run = tmp_path / "run"
+    main(
+        [
+            "train",
+            "--robustness",
+            "--data",
+            str(data),
+            "--run",
+            str(run),
+            "--device",
+            "cpu",
+            "--threads",
+            "2",
+            "--max-hours",
+            "0.000000001",
+        ]
+    )
+    result = json.loads((run / "epoch-1.json").read_text())
+    checkpoint = torch.load(run / "best.pt", weights_only=False)
+    assert set(result["int5"]) == set(training.ROBUST_PANELS)
+    expected_rows = {
+        name: (1 if name in {"old-us", "new-us"} else 7) for name in training.ROBUST_PANELS
+    }
+    assert {name: panel["rows"] for name, panel in result["int5"].items()} == expected_rows
+    assert all(
+        panel["unsupported"] == 0 and panel["total"] == expected_rows[name]
+        for name, panel in result["int5"].items()
+    )
+    assert result["eligible"] is True
+    assert quantization_checks == [True]
+    assert "structural_rng" in checkpoint
+    assert checkpoint["metadata"]["arguments"]["batch_size"] == 128
+    assert checkpoint["metadata"]["baseline_int5_sha256"]
+    assert checkpoint["metadata"]["augmentation_conflicts"]["keys"] == 0
+    assert set(checkpoint["metadata"]["validation_panels"]) == set(training.ROBUST_PANELS)
+    assert json.loads((run / "completion.json").read_text())["stop_reason"] == "time-budget"
+
+
+def test_locked_robustness_rejects_initialization(tmp_path):
+    with pytest.raises(ValueError, match="start from scratch"):
+        main(
+            [
+                "train",
+                "--robustness",
+                "--data",
+                str(tmp_path),
+                "--run",
+                str(tmp_path / "run"),
+                "--init",
+                str(tmp_path / "old.pt"),
+            ]
+        )

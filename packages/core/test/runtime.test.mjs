@@ -83,7 +83,7 @@ test('GPU failures release initialization resources and reject active and queued
 test('release weights are frozen and unavailable WebGPU fails before downloading', async () => {
   const bytes = readFileSync(new URL('../model.bin', import.meta.url));
   assert.equal(createHash('sha256').update(bytes).digest('hex'),
-    'e97cfb86c5ec703ad70ba684f2f373a44dc9c9e1018e517ab6799e74aa5ce84a');
+    '06a212f708a52c32e099c15e384e3bd149885c01d06c4b00343cc3b7ad894b60');
   assert.equal(readModel(bytes).weights.length, 154446);
   await assert.rejects(createParser(), /WebGPU is unavailable/);
 });

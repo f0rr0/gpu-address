@@ -1,0 +1,85 @@
+{
+  "model": "usaddress 0.5.16",
+  "country": "us",
+  "cohort": "complete",
+  "rows": 842,
+  "inputs_sha256": "dc3ef9fcbd2635619d406b82dbca6be7c8b749e3fc66fd6a1fd1ec0b4f6f546e",
+  "prediction_sha256": "ba7336cc0451d6cfde96afee8a6b8b86c1b13fb36b2084dce079cb10451f8109",
+  "versions": {
+    "usaddress": "0.5.16",
+    "python-crfsuite": "0.9.12",
+    "probableparsing": "0.0.1",
+    "brotli": "1.2.0"
+  },
+  "label_mapping": {
+    "AddressNumberPrefix": "street_address",
+    "AddressNumber": "street_address",
+    "AddressNumberSuffix": "street_address",
+    "StreetNamePreModifier": "street_address",
+    "StreetNamePreDirectional": "street_address",
+    "StreetNamePreType": "street_address",
+    "StreetName": "street_address",
+    "StreetNamePostType": "street_address",
+    "StreetNamePostDirectional": "street_address",
+    "SubaddressType": "street_address",
+    "SubaddressIdentifier": "street_address",
+    "BuildingName": "street_address",
+    "OccupancyType": "street_address",
+    "OccupancyIdentifier": "street_address",
+    "CornerOf": "street_address",
+    "LandmarkName": "street_address",
+    "PlaceName": "city",
+    "StateName": "state",
+    "ZipCode": "postcode",
+    "USPSBoxType": "street_address",
+    "USPSBoxID": "street_address",
+    "USPSBoxGroupType": "street_address",
+    "USPSBoxGroupID": "street_address",
+    "IntersectionSeparator": "street_address",
+    "Recipient": "street_address",
+    "NotAddress": "unrecognized"
+  },
+  "method": "Default usaddress.parse; no training. US complete cohort only. Same exact-field token-multiset scorer. Non-address tokens remain errors. Other parser results and frozen inputs unchanged. Competitor training overlap unknown.",
+  "score": {
+    "correct": 831,
+    "percent": 98.6935866983373,
+    "interval": [
+      97.67590279168668,
+      99.26897871640077
+    ],
+    "field_f1": 99.43586698337292,
+    "fields": {
+      "city": {
+        "rows": 842,
+        "predicted": 842,
+        "correct": 834,
+        "f1": 99.04988123515439
+      },
+      "street_address": {
+        "rows": 842,
+        "predicted": 842,
+        "correct": 831,
+        "f1": 98.6935866983373
+      },
+      "state": {
+        "rows": 842,
+        "predicted": 842,
+        "correct": 842,
+        "f1": 100.0
+      },
+      "postcode": {
+        "rows": 842,
+        "predicted": 842,
+        "correct": 842,
+        "f1": 100.0
+      }
+    }
+  },
+  "size": {
+    "bytes": 53853,
+    "uncompressed_bytes": 133768,
+    "model_sha256": "37ea2e93ece3b9340b4da455839ded8bb11a6c6ecaccfc3c8f80ed922f5065d9",
+    "file": "usaddr.crfsuite",
+    "compression": "Brotli quality 5; model only; Python, CRFsuite and feature-extraction code excluded."
+  }
+}

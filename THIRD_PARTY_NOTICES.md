@@ -6,7 +6,16 @@ is distributed with the source notices below, **not as an unrestricted MIT-only
 artifact**. No raw training corpus or competitor model is included in the package.
 No upstream organization endorses this project.
 
-## G-NAF — Australian training source
+## Release scope
+
+Experimental.3 is trained from scratch on US-only records, including 3 million
+additional worldwide-addresses US records and the retained 77,917 US originals.
+It does not fine-tune the earlier seven-country weights. The inherited US corpus
+lineage and attribution below still apply. G-NAF was a direct source for earlier
+releases, not the current US-only training selection; its historical notice is
+preserved here for those artifacts.
+
+## G-NAF — historical Australian training source
 
 Incorporates or developed using G-NAF © Geoscape Australia licensed by the
 Commonwealth of Australia under the Open Geo-coded National Address File (G-NAF)
@@ -33,9 +42,10 @@ Marouane Yassine and David Beauchemin, *Structured Multinational Address Data*
 [Pinned dataset card](https://huggingface.co/datasets/deepparse/worldwide-addresses/blob/cb61e5e49db87f8c3586b5494149f612460f8992/README.md).
 
 The dataset derives from libpostal's tagged training data; it is not independent
-of the sources below. We filtered to seven countries and eligible language
-metadata, remapped labels, reviewed subsets, deduplicated, split groups and
-applied case augmentation. Source labels are not independently verified truth.
+of the sources below. For experimental.3 we selected US records, remapped labels,
+reviewed subsets, deduplicated, split groups and applied case, field-omission and
+reordering augmentation. Earlier releases selected seven countries. Source labels
+are not independently verified truth.
 
 ## libpostal, Senzing, OpenStreetMap and OpenAddresses lineage
 
@@ -59,6 +69,13 @@ certification of every upstream record or a claim that all data is MIT licensed.
 Redistributing the raw training data requires a separate source-level review.
 
 ## Evaluation and inspiration
+
+The US50 historical evaluation material originates with Sunita Sarawagi,
+Indian Institute of Technology Bombay (2004), via usaddress. Its University of
+Illinois/NCSA notice is retained in
+`apps/website/public/evaluation-us-v1/us50-LICENSE.md`. It is evaluation material,
+not an endorsement. usaddress code/model terms are separate; competitor weights
+are not distributed with gpu-postal.
 
 The [GeoSearch address-parsing benchmark](https://github.com/zhengcongyin/Geocoding-Address-Parsing-Benchmark)
 is evaluation-only. The release includes aggregate scores and a reproduction
